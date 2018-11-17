@@ -51,6 +51,8 @@ if ($SN == "Sections") {
     } else
         if ($MN == "GET") {
         $result = $sc->$MN();
+    } else if ($MN == "GETUS") {
+        $result = $sc->$MN($_POST['sid']);
     }
     echo json_encode($result);
 }

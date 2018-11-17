@@ -63,16 +63,17 @@ sap.ui.define(
                   },
                 },
                 {
-                  pattern: "Dashboard/SectionOnUser",
-                  viewPath: "okul.Application.Dashboard.SectionOnUser.view",
-                  name: "Dashboard/SectionOnUser",
-                  view: "SectionOnUser",
+                  pattern:  "Dashboard/SectionUsers",
+                  viewPath: "okul.Application.Dashboard.SectionUsers.view",
+                  name: "Dashboard/SectionUsers",
+                  view: "SectionUsers",
                   targetControl: "DashboardRouterId",
                   transition: "show",
                   cache: {
                     keys: [version]
                   },
                 },
+                //
                 {
                   pattern: "Dashboard/AllProjects",
                   viewPath: "okul.Application.Dashboard.AllProjects.view",
@@ -96,10 +97,9 @@ sap.ui.define(
                   },
                 },
                 {
-                  pattern: "Dashboard/AllLesson",
-                  viewPath: "okul.Application.Dashboard.AllLesson.view",
-                  name: "Dashboard/AllLesson",
-                  view: "AllLesson",
+                  pattern: "Dashboard/SectionOnUser",
+                  viewPath: "okul.Application.Dashboard.SectionOnUser.view",
+                  name: "Dashboard/SectionOnUser",
                   targetControl: "DashboardRouterId",
                   transition: "show",
                   cache: {
@@ -107,10 +107,10 @@ sap.ui.define(
                   },
                 },
                 {
-                  pattern: "Dashboard/ProjectSelect",
-                  viewPath: "okul.Application.Dashboard.ProjectSelect.view",
-                  name: "Dashboard/ProjectSelect",
-                  view: "ProjectSelect",
+                  pattern: "Dashboard/AllLesson",
+                  viewPath: "okul.Application.Dashboard.AllLesson.view",
+                  name: "Dashboard/AllLesson",
+                  view: "AllLesson",
                   targetControl: "DashboardRouterId",
                   transition: "show",
                   cache: {
@@ -128,7 +128,6 @@ sap.ui.define(
                     keys: [version]
                   }
                 }]
-              // ProjectSelect
             },
             {
               pattern: "Register",

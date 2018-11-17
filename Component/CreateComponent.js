@@ -19,4 +19,7 @@ CreateComponent = {
             multiInput.setBusy(false);
         } else sap.ui.core.BusyIndicator.hide();
     },
+    tablaPaginator:function(){
+        
+    }
 }
