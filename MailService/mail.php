@@ -24,7 +24,7 @@ try {
     $mail->addReplyTo('ysndlklc1234@gmail.com', 'Bilgi');
     $mail->isHTML(true);                                 
     $mail->Subject = 'Kayıt Aktivitasyon Kodu';
-    $mail->Body    = "Aktivitasyon kodu :"."\n"."<b>".$activationKey."</b>";
+    $mail->Body    = "Aktivitasyon kodu :"."\n"."<b>".$activationKey."</b>"."</br>"."<p>"."Kaydınız Onaylandıktan Sonra Size Mail İle Bildirim Yapılacaktır."."</p>";
     $mail->AltBody = ' ';
     			if($mail->Send()) {
                     $result[]=array("status"=>"Succes","umail"=>$umail);

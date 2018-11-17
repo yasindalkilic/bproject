@@ -118,6 +118,28 @@ sap.ui.define(
                   },
                 },
                 {
+                  pattern: "Dashboard/AcceptUsers",
+                  viewPath: "okul.Application.Dashboard.AcceptUsers.view",
+                  name: "Dashboard/AcceptUsers",
+                  view: "AcceptUsers",
+                  targetControl: "DashboardRouterId",
+                  transition: "show",
+                  cache: {
+                    keys: [version]
+                  },
+                },
+                {
+                  pattern: "Dashboard/ProjectSelect",
+                  viewPath: "okul.Application.Dashboard.ProjectSelect.view",
+                  name: "Dashboard/ProjectSelect",
+                  view: "ProjectSelect",
+                  targetControl: "DashboardRouterId",
+                  transition: "show",
+                  cache: {
+                    keys: [version]
+                  },
+                },
+                {
                   pattern: "Dashboard/AddUser",
                   viewPath: "okul.Application.Dashboard.AddUser.view",
                   name: "Dashboard/AddUser",

@@ -129,6 +129,8 @@ if ($SN == "User") {
         $result = $user->$MN($_POST['ufnm'], $_POST['ulnm'], $_POST['unm'], $_POST['utel'], $_POST['upnt'], $_POST['usno'], $_POST['upass'], $_POST['sid'], $_POST['tid'], $_POST['uauthr'], $_POST['email']);
     } else if ($MN == "GAUW") {
         $result = $user->$MN($_POST['uwhere'], $_POST['uparam'], $_POST['mwhere'], $_POST['mparam'], $_POST['pwhere'], $_POST['pparam']);
+    } else if ($MN == "ADDRU") {
+        $result = $user->$MN($_POST['userdata']);
     }
     echo json_encode($result);
 }
@@ -144,11 +146,9 @@ if ($SN == "Register") {
     if ($MN == "ADD") {
         $result = $register->$MN($_POST['ad'], $_POST['soyad'], $_POST['ogrno'], $_POST['tcno'], $_POST['email'], $_POST['sid'], $_POST['tel']);
     } else if ($MN == "GET") {
-        $result = $register->$MN($_POST['key']);
-    } else if ($MN == "GETAR") {
-        $result = $register->$MN($_POST['rtsno'], $_POST['rttcno']);
+        $result = $register->$MN($_POST['where'], $_POST['param']);
     } else if ($MN == "DEL") {
-        $result = $register->$MN($_POST['key']);
+        $result = $register->$MN($_POST['where'], $_POST['param']);
     } else if ($MN == "DELALL") {
         $result = $register->$MN();
     }

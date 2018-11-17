@@ -83,7 +83,7 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
         },
         getAllRegister: function () {
             var _this = this
-            RegisterService.RegisterReq({ "MN": "GETAR", SN: "Register", "rtsno": parseInt(oModel.oData.RegisterModel.ogrno), "rttcno": oModel.oData.RegisterModel.tcno }).then(function (res) {
+            RegisterService.RegisterReq({ "MN": "GET", where: "rtsno=? OR rttcno=?", param: [parseInt(oModel.oData.RegisterModel.ogrno), oModel.oData.RegisterModel.tcno], SN: "Register" }).then(function (res) {
                 if (res == "None") {
                     var data = {
                         SN: "User",
@@ -124,7 +124,8 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
                 oModel.oData.RegisterModel.ogrno = parseInt(oModel.oData.RegisterModel.ogrno)
                 oModel.refresh()
                 RegisterService.RegisterReq(oModel.oData.RegisterModel).then(function (res) {
-                    RegisterService.RegisterReq({ "key": res[0].activationkey, "MN": "GET", "SN": "Register" }).then(function (res) {
+                    debugger
+                    RegisterService.RegisterReq({ "where": 'rtrcode=?', param: [res[0].activationkey], "MN": "GET", "SN": "Register" }).then(function (res) {
                         oModel.setProperty("/userRegister", res);
                         oModel.setProperty("/RegisterModel", [])
                         MailService.AddMail({ "mail": oModel.oData.userRegister[0].rtemail, "activationKey": oModel.oData.userRegister[0].rtrcode }).then(function (res) {

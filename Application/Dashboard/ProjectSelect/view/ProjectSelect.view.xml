@@ -15,16 +15,7 @@
                     <m:Button text="" press="allLesson" type="Transparent" icon="sap-icon://refresh" tooltip="Yenile" id="refresh" />
                 </m:HBox>
             </m:VBox>
-            <Table id="idactivesproject" visibleRowCount="10" selectionMode="None" enableColumnReordering='false' ariaLabelledBy="title">
-                <!-- <contextMenu>
-                    <m:Menu>
-                        <m:items>
-                            <m:MenuItem text="İlgili Projeler" press="rightClick" />
-                            <m:MenuItem text="Dersi Görüntüle" press="rightClick" />
-                            <m:MenuItem text="Dersi Sil" press="rightClick" />
-                        </m:items>
-                    </m:Menu>
-                </contextMenu> -->
+            <Table id="idactivesproject" visibleRowCount="10" selectionMode="MultiToggle" enableColumnReordering='false' ariaLabelledBy="title">
                 <columns >
                     <Column width="11rem">
                         <m:Label text="Proje Adı" />
