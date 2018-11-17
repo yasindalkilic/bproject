@@ -1,0 +1,63 @@
+<mvc:View controllerName="okul.Application.Dashboard.ProjectSelect.controller.ProjectSelect" 
+    xmlns="sap.ui.table" 
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns:u="sap.ui.unified" 
+    xmlns:c="sap.ui.core" 
+    xmlns:m="sap.m" height="100%" class="sapUiSizeCompact">
+    <m:Page id="page" showHeader="false" enableScrolling="false">
+        <m:content>
+            <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
+                <m:Title text="Tüm Projeler" />
+            </m:VBox>
+            <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
+                <m:HBox alignItems="Center" justifyContent="Start" width="100%">
+                    <m:SearchField placeholder="Ara .." width="500px" id="searchBar" search="searchTable"/>
+                    <m:Button text="" press="allLesson" type="Transparent" icon="sap-icon://refresh" tooltip="Yenile" id="refresh" />
+                </m:HBox>
+            </m:VBox>
+            <Table id="idactivesproject" visibleRowCount="10" selectionMode="None" enableColumnReordering='false' ariaLabelledBy="title">
+                <!-- <contextMenu>
+                    <m:Menu>
+                        <m:items>
+                            <m:MenuItem text="İlgili Projeler" press="rightClick" />
+                            <m:MenuItem text="Dersi Görüntüle" press="rightClick" />
+                            <m:MenuItem text="Dersi Sil" press="rightClick" />
+                        </m:items>
+                    </m:Menu>
+                </contextMenu> -->
+                <columns >
+                    <Column width="11rem">
+                        <m:Label text="Proje Adı" />
+                        <template>
+                            <m:Text text="{pjnm}" />
+                        </template>
+                    </Column>
+                    <Column width="11rem">
+                        <m:Label text="Projeyi Yayınlayan" />
+                        <template>
+                            <m:Text text="{ufnm}" />
+                        </template>
+                    </Column>
+                    <Column width="11.5rem">
+                        <m:Label text="Projenin İçeriği" />
+                        <template>
+                            <m:Text text="{pjcntn}" />
+                        </template>
+                    </Column>
+                    <Column width="14rem">
+                        <m:Label text="Projedeki Teknolojiler" />
+                        <template>
+                            <m:Text text="{pjtechnology}" />
+                        </template>
+                    </Column>
+                    <Column width="14rem">
+                        <m:Label text="Projedeki Dersler" />
+                        <template>
+                            <m:Text text="{lnm}" />
+                        </template>
+                    </Column>
+                </columns>
+            </Table>
+        </m:content>
+    </m:Page>
+</mvc:View>
