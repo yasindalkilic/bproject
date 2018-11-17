@@ -1,11 +1,1 @@
-jQuery.sap.require("okul.AllRequest.AllRequest");
-var SectionService = {
-    SectionReq:function(json){
-        var deferred = new Promise(function (resolve, reject) {
-            AllRequest.POST(json).then(function (res) {
-                resolve(res);
-            })
-        })
-        return deferred;
-    },
-}
+jQuery.sap.require("okul.AllRequest.AllRequest");var SectionService={SectionReq:function(e){return new Promise(function(n,t){AllRequest.POST(e).then(function(e){n(e)})})}};

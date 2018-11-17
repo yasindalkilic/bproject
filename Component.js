@@ -61,7 +61,19 @@ sap.ui.define(
                   cache: {
                     keys: [version]
                   },
-                }, {
+                },
+                {
+                  pattern: "Dashboard/SectionOnUser",
+                  viewPath: "okul.Application.Dashboard.SectionOnUser.view",
+                  name: "Dashboard/SectionOnUser",
+                  view: "SectionOnUser",
+                  targetControl: "DashboardRouterId",
+                  transition: "show",
+                  cache: {
+                    keys: [version]
+                  },
+                },
+                {
                   pattern: "Dashboard/AllProjects",
                   viewPath: "okul.Application.Dashboard.AllProjects.view",
                   name: "Dashboard/AllProjects",
@@ -93,7 +105,7 @@ sap.ui.define(
                   cache: {
                     keys: [version]
                   },
-                }, 
+                },
                 {
                   pattern: "Dashboard/ProjectSelect",
                   viewPath: "okul.Application.Dashboard.ProjectSelect.view",
@@ -104,7 +116,7 @@ sap.ui.define(
                   cache: {
                     keys: [version]
                   },
-                }, 
+                },
                 {
                   pattern: "Dashboard/AddUser",
                   viewPath: "okul.Application.Dashboard.AddUser.view",
@@ -116,7 +128,7 @@ sap.ui.define(
                     keys: [version]
                   }
                 }]
-                // ProjectSelect
+              // ProjectSelect
             },
             {
               pattern: "Register",

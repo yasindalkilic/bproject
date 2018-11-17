@@ -1,0 +1,64 @@
+<mvc:View controllerName="okul.Application.Dashboard.SectionOnUser.controller.SectionOnUser" 
+    xmlns="sap.ui.table" 
+    xmlns:mvc="sap.ui.core.mvc" 
+    xmlns:u="sap.ui.unified" 
+    xmlns:c="sap.ui.core" 
+    xmlns:m="sap.m" height="100%" class="sapUiSizeCompact">
+    <m:Page id="page" showHeader="false" enableScrolling="false">
+        <m:content>
+            <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
+                <m:Title text="Tüm Dersler" />
+            </m:VBox>
+            <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
+                <m:HBox alignItems="Center" justifyContent="Start" width="100%">
+                    <m:SearchField placeholder="Ara .." width="500px" id="searchBar" search="searchTable"/>
+                    <m:Button text="" press="allLesson" type="Transparent" icon="sap-icon://refresh" tooltip="Yenile" id="refresh" />
+
+                </m:HBox>
+            </m:VBox>
+            <Table id="idlessonTable" visibleRowCount="10" selectionMode="None" enableColumnReordering='false' ariaLabelledBy="title">
+                <contextMenu>
+                    <m:Menu>
+                        <m:items>
+                            <m:MenuItem text="İlgili Projeler" press="rightClick" />
+                            <m:MenuItem text="Dersi Görüntüle" press="rightClick" />
+                            <m:MenuItem text="Dersi Sil" press="rightClick" />
+                        </m:items>
+                    </m:Menu>
+                </contextMenu>
+                <columns >
+                    <Column width="11rem">
+                        <m:Label text="Ders Adı" />
+                        <template>
+                            <m:Text text="{lnm}" />
+                        </template>
+                    </Column>
+                    <Column width="11rem">
+                        <m:Label text="Dersin Dönemi" />
+                        <template>
+                            <m:Text text="{lperiod}" />
+                        </template>
+                    </Column>
+                    <Column width="11.5rem">
+                        <m:Label text="Dersin Sınıfı" />
+                        <template>
+                            <m:Text text="{lclass}" />
+                        </template>
+                    </Column>
+                    <Column width="14rem">
+                        <m:Label text="Dersin İçeriği" />
+                        <template>
+                            <m:Text text="{lperiod}" />
+                        </template>
+                    </Column>
+                    <Column width="20rem">
+                        <m:Label text="Dersin Kodu" />
+                        <template>
+                            <m:Text text="{lcode}" />
+                        </template>
+                    </Column>
+                </columns>
+            </Table>
+        </m:content>
+    </m:Page>
+</mvc:View>
