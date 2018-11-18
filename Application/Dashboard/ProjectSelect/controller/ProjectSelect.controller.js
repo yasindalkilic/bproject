@@ -86,12 +86,12 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                 }
                 else {
                     CreateComponent.showBusyIndicator();
-                    var oTable2 = _this.getView().byId("idlessonTable")
                     LessonService.lessonReq({ MN: "GETWHERE", "SN": "Lesson", field: "lesson", where: "sid", allparam: [parseInt(oModel.oData.UserModel[0].sid)] }).then(function (res) {
                         if (res == "None") {
                             CreateComponent.hideBusyIndicator();
                         } else {
                             oModel.setProperty("/allLesson", res)
+                          
                             var oLength = oModel.oData.allLesson.length;
                             var oActual = oLength / 10;
                             var oCalculation = (oActual % 1 == 0);
@@ -125,38 +125,6 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                     })
                 }
             })
-        },
-        tablePagination: function () {
-            var _this = this
-            var oTable2 = _this.getView().byId("idactivesproject")
-            var oLength = oModel.oData.allProject.length;
-            var oActual = oLength / 10;
-            var oCalculation = (oActual % 1 == 0);
-            if (oCalculation == true) {
-                var oValue = oActual;
-            } else {
-                var oValue = parseInt(oActual) + 1;
-            }
-            oModel.setProperty("/oRows", oModel.oData.allProject.slice(0, 10));
-            oTable2.bindRows("/oRows");
-            if (sap.ui.getCore().byId('pa') != undefined) {
-                sap.ui.getCore().byId('pa').destroy();
-            }
-            var oPaginator = new sap.ui.commons.Paginator("pa", {
-                numberOfPages: oValue,
-                page: function (oEvent) {
-                    var oValue = oEvent;
-                    var oTargetPage = oEvent.getParameter("targetPage");
-                    var oTargetValue = oTargetPage * 10;
-                    var oSourceValue = oTargetValue - 10;
-                    var oModel = sap.ui.getCore().getModel();
-                    var oTotalData = oModel.getProperty("/allProject");
-                    var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
-                    oModel.setProperty("/oRows", oSelectedData);
-                    oTable2.clearSelection();
-                }
-            }).addStyleClass("paginatorStyle");
-            _this.getView().byId("page").addContent(oPaginator)
         },
         getActiveProject: function () {
             var _this = this
@@ -206,7 +174,8 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             // }
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/allProject", res)
-                                      _this.tablePagination();
+                            CreateComponent.tablaPaginator(_this,'idactivesproject',"allProject",'page');
+                               
 
                             // debugger
                             // var arr = []

@@ -124,11 +124,11 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
                 oModel.oData.RegisterModel.ogrno = parseInt(oModel.oData.RegisterModel.ogrno)
                 oModel.refresh()
                 RegisterService.RegisterReq(oModel.oData.RegisterModel).then(function (res) {
-                    debugger
                     RegisterService.RegisterReq({ "where": 'rtrcode=?', param: [res[0].activationkey], "MN": "GET", "SN": "Register" }).then(function (res) {
                         oModel.setProperty("/userRegister", res);
                         oModel.setProperty("/RegisterModel", [])
-                        MailService.AddMail({ "mail": oModel.oData.userRegister[0].rtemail, "activationKey": oModel.oData.userRegister[0].rtrcode }).then(function (res) {
+                        var msg = "Aktivitasyon kodu :" + oModel.oData.userRegister[0].rtrcode + "Kaydınız Onaylandıktan Sonra Size Mail İle Bildirim Yapılacaktır.";
+                        MailService.AddMail({ "mail": oModel.oData.userRegister[0].rtemail, "messega": msg }).then(function (res) {
                             if (res == "None") {
                                 resolve(false);
                                 sap.m.MessageToast.show("Mail Gönderilirken Bir Hata Oluştu");

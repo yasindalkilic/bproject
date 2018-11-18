@@ -69,6 +69,53 @@
 								</VBox>
 							</l:Grid>
 						</VBox>
+						<Table id="lesson" inset="false" items="{
+			path: '/AdlesAll'
+		}">
+							<headerToolbar>
+								<Toolbar>
+									<content>
+										<ToolbarSpacer />
+									</content>
+								</Toolbar>
+							</headerToolbar>
+							<infoToolbar>
+								<Toolbar active="ture">
+									<Label text="Tüm Dersler"/>
+								</Toolbar>
+							</infoToolbar>
+							<columns>
+								<Column
+				>
+									<Text text="Ders Adı" />
+								</Column>
+								<Column minScreenWidth="Desktop">
+									<Text text="Dersin Dönemi" />
+								</Column>
+								<Column minScreenWidth="Desktop">
+									<Text text="Dersin Sınıfı" />
+								</Column>
+								<Column
+				>
+									<Text text="Dersin İçeriği" />
+								</Column>
+								<Column
+				>
+									<Text text="Dersin Kodu" />
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<ObjectIdentifier text="{lnm}"/>
+										<ObjectIdentifier text="{lperiod}"/>
+										<ObjectIdentifier text="{lclass}"/>
+										<ObjectIdentifier text="{lcntn}"/>
+										<ObjectIdentifier text="{lcode}"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
 					</ScrollContainer>
 				</l:flexContent>
 			</l:FixFlex>

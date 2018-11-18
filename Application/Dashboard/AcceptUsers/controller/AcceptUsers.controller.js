@@ -1,3 +1,4 @@
+jQuery.sap.require("okul.Servicejs.MailService");
 jQuery.sap.require("okul.Servicejs.UserService");
 jQuery.sap.require("okul.Application.Register.RegisterServicejs.RegisterService");
 sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/export/Spreadsheet", "sap/ui/model/Sorter"], function (Controller, Filter, Spreadsheet, Sorter) {
@@ -33,38 +34,6 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                 binding.filter(_this.aFilters, "Application");
             }
         },
-        tablePagination: function () {
-            var _this = this
-            var oTable2 = _this.getView().byId("idacceptusers")
-            var oLength = oModel.oData.acceptuser.length;
-            var oActual = oLength / 10;
-            var oCalculation = (oActual % 1 == 0);
-            if (oCalculation == true) {
-                var oValue = oActual;
-            } else {
-                var oValue = parseInt(oActual) + 1;
-            }
-            oModel.setProperty("/oRows", oModel.oData.acceptuser.slice(0, 10));
-            oTable2.bindRows("/oRows");
-            if (sap.ui.getCore().byId('pa') != undefined) {
-                sap.ui.getCore().byId('pa').destroy();
-            }
-            var oPaginator = new sap.ui.commons.Paginator("pa", {
-                numberOfPages: oValue,
-                page: function (oEvent) {
-                    var oValue = oEvent;
-                    var oTargetPage = oEvent.getParameter("targetPage");
-                    var oTargetValue = oTargetPage * 10;
-                    var oSourceValue = oTargetValue - 10;
-                    var oModel = sap.ui.getCore().getModel();
-                    var oTotalData = oModel.getProperty("/acceptuser");
-                    var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
-                    oModel.setProperty("/oRows", oSelectedData);
-                    oTable2.clearSelection();
-                }
-            }).addStyleClass("paginatorStyle");
-            _this.getView().byId("page").addContent(oPaginator)
-        },
         getAcceptUser: function () {
             var _this = this
             Servertime.getY().then(function (res) {
@@ -87,57 +56,101 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         } else {
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/acceptuser", res)
-                            _this.tablePagination();
+                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page")
                         }
                     })
                 }
             })
         },
         delRegister: function () {
-            debugger
-            RegisterService.RegisterReq().then(function (res) {
-                if(res){
-                    debugger
+            var _this = this
+            var Table = _this.byId("idacceptusers");
+            var rdata = []
+            var selected = Table.getSelectedIndices();
+            for (let index = 0; index < Table.getSelectedIndices().length; index++) {
+                var spath = _this.byId("idacceptusers").getRows()[selected[index]]._getBindingContext().sPath
+                rdata.push({
+                    rtemail: oModel.getProperty(spath).rtemail,
+                    rid: oModel.getProperty(spath).rtid
+                })
+            }
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
+                } else {
+                    CreateComponent.showBusyIndicator();
+                    var param = "";
+                    for (let index = 0; index < rdata.length; index++) {
+                        if (index == rdata.length - 1) {
+                            param += "'" + rdata[index].rid + "'"
+                        } else {
+                            param += "'" + rdata[index].rid + "'" + ","
+                        }
+                    }
+                    RegisterService.RegisterReq({
+                        MN: "DEL",
+                        SN: "Register",
+                        where: "rtid",
+                        param: param
+                    }).then(function (res) {
+                        if (res == "SuccesDel") {
+                            CreateComponent.hideBusyIndicator();
+                            sap.m.MessageToast.show("İşlem Başarıyla Gerçekleşti")
+                            for (let index = 0; index < rdata.length; index++) {
+                                MailService.AddMail({ "mail": rdata[index].rtemail, "messega": "Kaydınız  Onaylandı Şifreniz TC KİMLİK NUMARANIZ olarak Belirlenmiştir." }).then(function (res) {
+                                })
+                            }
+                            _this.getAcceptUser();
+                        } else if (res == "None") {
+                            sap.m.MessageToast.show("Lütfen Daha Sonra Tekrar Deneyin")
+                        }
+                    })
                 }
             })
         },
         AddUser: function () {
             var _this = this
-            var data = []
-            var Table = _this.byId("idacceptusers");
-            if (this.byId("idacceptusers").getSelectedIndices().length > 0) {
-                var selected = Table.getSelectedIndices();
-                for (let index = 0; index < Table.getSelectedIndices().length; index++) {
-                    var spath = this.byId("idacceptusers").getRows()[selected[index]]._getBindingContext().sPath
-                    data.push({
-                        SN: "User",
-                        ufnm: oModel.getProperty(spath).rtnm,
-                        ulnm: oModel.getProperty(spath).rtlnm,
-                        utel: oModel.getProperty(spath).phone,
-                        email: oModel.getProperty(spath).rtemail,
-                        upnt: "",
-                        tid: "2",
-                        uauthr: "3",
-                        usno: oModel.getProperty(spath).rtsno,
-                        sid: parseInt(oModel.getProperty(spath).sid),
-                        unm: oModel.getProperty(spath).rtsno,
-                        upass: md5(oModel.getProperty(spath).rttcno),
-                        MN: "ADDRU"
-                    })
-                }
-                UserServices.UserReq({ MN: "ADDRU", SN: "User", userdata: data }).then(function (res) {
-                    if (res == "SuccesAdd") {
-                        _this.delRegister();
-                    } else if (res == "") {
-                        sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyiniz")
-                    } else if (res == "None") {
-                        sap.m.MessageToast.show("Bilinmeyen Bir Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyiniz")
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
+                } else {
+                    var data = []
+                    var Table = _this.byId("idacceptusers");
+                    if (_this.byId("idacceptusers").getSelectedIndices().length > 0) {
+                        var selected = Table.getSelectedIndices();
+                        for (let index = 0; index < Table.getSelectedIndices().length; index++) {
+                            var spath = _this.byId("idacceptusers").getRows()[selected[index]]._getBindingContext().sPath
+                            data.push({
+                                SN: "User",
+                                ufnm: oModel.getProperty(spath).rtnm,
+                                ulnm: oModel.getProperty(spath).rtlnm,
+                                utel: oModel.getProperty(spath).phone,
+                                email: oModel.getProperty(spath).rtemail,
+                                upnt: "",
+                                tid: "2",
+                                uauthr: "3",
+                                usno: oModel.getProperty(spath).rtsno,
+                                sid: parseInt(oModel.getProperty(spath).sid),
+                                unm: oModel.getProperty(spath).rtsno,
+                                upass: md5(oModel.getProperty(spath).rttcno),
+                                MN: "ADDRU"
+                            })
+                        }
+                        UserServices.UserReq({ MN: "ADDRU", SN: "User", userdata: data }).then(function (res) {
+                            if (res == "SuccesAdd") {
+                                _this.delRegister();
+                            } else if (res == "") {
+                                sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyiniz")
+                            } else if (res == "None") {
+                                sap.m.MessageToast.show("Bilinmeyen Bir Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyiniz")
+                            }
+                        })
                     }
-                })
-            }
-            else {
-                sap.m.MessageToast.show("Seçili Kayıt Bulunamadı")
-            }
+                    else {
+                        sap.m.MessageToast.show("Seçili Kayıt Bulunamadı")
+                    }
+                }
+            })
         },
         onBeforeShow: function (argument) {
             var _this = this;

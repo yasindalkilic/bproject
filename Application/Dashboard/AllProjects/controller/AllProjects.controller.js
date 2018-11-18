@@ -387,38 +387,6 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
         ProjectOnLesson: function (param) {
             window.open(param);
         },
-        tablePagination: function () {
-            var _this = this
-            var oTable2 = _this.getView().byId("idprojectAll")
-            var oLength = oModel.oData.allProject.length;
-            var oActual = oLength / 10;
-            var oCalculation = (oActual % 1 == 0);
-            if (oCalculation == true) {
-                var oValue = oActual;
-            } else {
-                var oValue = parseInt(oActual) + 1;
-            }
-            oModel.setProperty("/oRows", oModel.oData.allProject.slice(0, 10));
-            oTable2.bindRows("/oRows");
-            if (sap.ui.getCore().byId('pa') != undefined) {
-                sap.ui.getCore().byId('pa').destroy();
-            }
-            var oPaginator = new sap.ui.commons.Paginator("pa", {
-                numberOfPages: oValue,
-                page: function (oEvent) {
-                    var oValue = oEvent;
-                    var oTargetPage = oEvent.getParameter("targetPage");
-                    var oTargetValue = oTargetPage * 10;
-                    var oSourceValue = oTargetValue - 10;
-                    var oModel = sap.ui.getCore().getModel();
-                    var oTotalData = oModel.getProperty("/allProject");
-                    var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
-                    oModel.setProperty("/oRows", oSelectedData);
-                    oTable2.clearSelection();
-                }
-            }).addStyleClass("paginatorStyle");
-            _this.getView().byId("page").addContent(oPaginator)
-        },
         getProject: function (param, filter) {
             debugger
             var _this = this
@@ -447,7 +415,8 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                                 _this.byId("Meid").setVisible(true)
                                 _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.None);
                                 oModel.setProperty("/allProject", res)
-                                _this.tablePagination();
+                                CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page")
+                            
                             }
                             CreateComponent.hideBusyIndicator();
                         })
@@ -470,7 +439,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                                 _this.byId("Meid").setVisible(false)
                                 _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.MultiToggle);
                                 oModel.setProperty("/allProject", res)
-                                _this.tablePagination();
+                                CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page")
                             }
                             CreateComponent.hideBusyIndicator();
                         })
@@ -500,7 +469,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             _this.byId("meHeader").setVisible(false);
                             _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.None);
                             oModel.setProperty("/allProject", res)
-                            _this.tablePagination();
+                            CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page")
                             CreateComponent.hideBusyIndicator();
                         }
                     })

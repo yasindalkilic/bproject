@@ -8,12 +8,33 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
             oRouter.getRoute("Dashboard/AddLesson").attachPatternMatched(_this.onBeforeShow, _this);
         },
         onBeforeShow: function (argument) {
+            var _this = this
             UseronLogin.onLogin().then(function (res) {
+                _this.allLesson();
                 oModel.setProperty("/lessonAddModel", {
                     lnm: "",
                     lcntn: "",
                     lcode: "",
                 })
+            })
+        },
+        allLesson: function () {
+            var _this = this
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
+                }
+                else {
+                    CreateComponent.showBusyIndicator();
+                    LessonService.lessonReq({ MN: "GETWHERE", "SN": "Lesson", field: "lesson", where: "sid", allparam: [parseInt(oModel.oData.UserModel[0].sid)] }).then(function (res) {
+                        if (res == "None") {
+                            CreateComponent.hideBusyIndicator();
+                        } else {
+                            oModel.setProperty("/AdlesAll", res)
+                            CreateComponent.hideBusyIndicator();
+                        }
+                    })
+                }
             })
         },
         validateData: function () {

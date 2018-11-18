@@ -23,7 +23,8 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/json/JSONModel', 'sap
                 clearInterval(timeControl);
                 if (oModel.oData.userRegister != undefined) {
                     if (oModel.oData.userRegister[0].rtrcode) {
-                        UserServices.UserReq({ SN: "Register", MN: "DEL", where: "rtrcode=?", param: [oModel.oData.userRegister[0].rtrcode] }).then(function (res) {
+                        var param = "'" + oModel.oData.userRegister[0].rtrcode + "'";
+                        UserServices.UserReq({ SN: "Register", MN: "DEL", where: "rtrcode", param: param }).then(function (res) {
                         })
                     }
                 } else {

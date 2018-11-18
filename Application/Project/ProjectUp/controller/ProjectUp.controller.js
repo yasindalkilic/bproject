@@ -20,46 +20,57 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/export/Spreadsheet", 'sap/u
                 Servertime.getY().then(function (res) {
                     if (res != new Date().toLocaleDateString().split(".")[2]) {
                         sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
-                    }
-                })
-                LessonService.lessonReq({ MN: "GET", "SN": "Lesson" }).then(function (res) {
-                    if (res == "None") {
                     } else {
-                        oModel.setProperty("/allLesson", res)
+                        LessonService.lessonReq({ MN: "GET", "SN": "Lesson" }).then(function (res) {
+                            if (res == "None") {
+                            } else {
+                                oModel.setProperty("/allLesson", res)
+                            }
+                            _this.getProjectonLesson();
+                        })
+                        _this.getProject();
                     }
-                    _this.getProjectonLesson();
                 })
-                _this.getProject();
             })
+
         },
         getProjectonLesson: function () {
             var _this = this
-            var filter = window.location.hash.split("?")[1].split("=")[1];
-            if (filter.trim() != "") {
-                var data = {
-                    "MN": "GETP",
-                    where: "pjid=?",
-                    param: filter,
-                    SN: "ProjectOnLesson"
-                }
-                var sD = [];
-                var lm = _this.byId("lessonCombo");
-                ProjectonLesson.ProjectonLessonReq(data).then(function (res) {
-                    if (res == "None") {
-                        oModel.setProperty("/Selected", [])
-                        CreateComponent.hideBusyIndicator();
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
+                } else {
+                    var filter = window.location.hash.split("?")[1].split("=")[1];
+                    if (filter.trim() != "") {
+                        var data = {
+                            "MN": "GETP",
+                            where: "pjid=?",
+                            param: filter,
+                            SN: "ProjectOnLesson"
+                        }
+                        var sD = [];
+                        var lm = _this.byId("lessonCombo");
+                        ProjectonLesson.ProjectonLessonReq(data).then(function (res) {
+                            if (res == "None") {
+                                oModel.setProperty("/Selected", [])
+                                CreateComponent.hideBusyIndicator();
+                            } else {
+                                oModel.setProperty("/Selected", res)
+                                res.forEach(element => {
+                                    sD.push(element.lid);
+                                });
+                                lm.setSelectedKeys(sD);
+                                CreateComponent.hideBusyIndicator();
+
+                            }
+
+                        })
+
                     } else {
-                        oModel.setProperty("/Selected", res)
-                        res.forEach(element => {
-                            sD.push(element.lid);
-                        });
-                        lm.setSelectedKeys(sD);
-                        CreateComponent.hideBusyIndicator();
+                        sap.m.MessageToast.show("Hatalı Parametre")
                     }
-                })
-            } else {
-                sap.m.MessageToast.show("Hatalı Parametre")
-            }
+                }
+            })
         },
         onLessonTransaction: function (oEvent) {
             var _this = this
@@ -152,32 +163,38 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/export/Spreadsheet", 'sap/u
         },
         ProjectAPL: function (param) {
             var _this = this
-            if (param.length > 0) {
-                var less = []
-                var filter = window.location.hash.split("?")[1].split("=")[1];
-                if (filter.trim() != "") {
-                    for (let index = 0; index < param.length; index++) {
-                        less.push({
-                            lessondata: oModel.oData.selectedLess[param[index]].mProperties.key
-                        })
-                    }
-                    var alldata = {
-                        MN: 'APL',
-                        SN: "ProjectOnLesson",
-                        pjid: filter,
-                        lessondata: less
-                    }
-                    ProjectonLesson.ProjectonLessonReq(alldata).then(function (res) {
-                        if (res == "SuccesAdd") {
-                            _this.updateProject();
-                        } else if (res == "None") {
-                            sap.m.MessageToast.show("Beklenmedik Hata")
-                        } else {
-                            sap.m.MessageToast.show("Sunucuda Hata Meydana Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin ")
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
+                } else {
+                    if (param.length > 0) {
+                        var less = []
+                        var filter = window.location.hash.split("?")[1].split("=")[1];
+                        if (filter.trim() != "") {
+                            for (let index = 0; index < param.length; index++) {
+                                less.push({
+                                    lessondata: oModel.oData.selectedLess[param[index]].mProperties.key
+                                })
+                            }
+                            var alldata = {
+                                MN: 'APL',
+                                SN: "ProjectOnLesson",
+                                pjid: filter,
+                                lessondata: less
+                            }
+                            ProjectonLesson.ProjectonLessonReq(alldata).then(function (res) {
+                                if (res == "SuccesAdd") {
+                                    _this.updateProject();
+                                } else if (res == "None") {
+                                    sap.m.MessageToast.show("Beklenmedik Hata")
+                                } else {
+                                    sap.m.MessageToast.show("Sunucuda Hata Meydana Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin ")
+                                }
+                            })
                         }
-                    })
+                    }
                 }
-            }
+            })
         },
         projetLD: function (param) {
             var deferred = new Promise(function (resolve, reject) {
@@ -198,54 +215,66 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/export/Spreadsheet", 'sap/u
         },
         updateProject: function () {
             var _this = this
-            var filterU = window.location.hash.split("?")[1].split("=")[1];
-            var filter = {}
-            filter.SN = "Project",
-                filter.MN = "SET",
-                filter.wparam = filterU,
-                filter.operation = "IN",
-                filter.wset = "pjnm=?,pjtechnology=?,pjcntn=?  ",
-                filter.wsetparam = [
-                    oModel.oData.projectUp[0].pjnm.toUpperCase(),
-                    oModel.oData.projectUp[0].pjtechnology.toUpperCase(),
-                    oModel.oData.projectUp[0].pjcntn.toUpperCase(),
-                ]
-            filter.setfield = "pjid"
-            ProjectonLesson.ProjectonLessonReq(filter).then(function (res) {
-                if (res == "SuccedUpdate") {
-                    sap.m.MessageToast.show("Kayıt Güncellendi");
-                    oModel.setProperty("/enb", false);
-                    _this.getProject();
-                } else if (res == "") {
-                    sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
                 } else {
-                    sap.m.MessageToast.show("Kayıt Güncellenirken Hata Oluştu");
+                    var filterU = window.location.hash.split("?")[1].split("=")[1];
+                    var filter = {}
+                    filter.SN = "Project",
+                        filter.MN = "SET",
+                        filter.wparam = filterU,
+                        filter.operation = "IN",
+                        filter.wset = "pjnm=?,pjtechnology=?,pjcntn=?  ",
+                        filter.wsetparam = [
+                            oModel.oData.projectUp[0].pjnm.toUpperCase(),
+                            oModel.oData.projectUp[0].pjtechnology.toUpperCase(),
+                            oModel.oData.projectUp[0].pjcntn.toUpperCase(),
+                        ]
+                    filter.setfield = "pjid"
+                    ProjectonLesson.ProjectonLessonReq(filter).then(function (res) {
+                        if (res == "SuccedUpdate") {
+                            sap.m.MessageToast.show("Kayıt Güncellendi");
+                            oModel.setProperty("/enb", false);
+                            _this.getProject();
+                        } else if (res == "") {
+                            sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
+                        } else {
+                            sap.m.MessageToast.show("Kayıt Güncellenirken Hata Oluştu");
+                        }
+                    })
                 }
             })
         },
         getProject: function () {
             var _this = this
-            CreateComponent.showBusyIndicator();
-            var filter = window.location.hash.split("?")[1].split("=")[1];
-            if (filter.trim() != "") {
-                ProjectonLesson.ProjectonLessonReq({
-                    MN: "GETWHERE",
-                    SN: "Project",
-                    where: "pjid=?",
-                    allparam: [filter]
-                }).then(function (res) {
-                    if (res == "None") {
-                        sap.m.MessageToast.show("Beklenmeye Hata");
-                        CreateComponent.hideBusyIndicator();
+            Servertime.getY().then(function (res) {
+                if (res != new Date().toLocaleDateString().split(".")[2]) {
+                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
+                } else {
+                    CreateComponent.showBusyIndicator();
+                    var filter = window.location.hash.split("?")[1].split("=")[1];
+                    if (filter.trim() != "") {
+                        ProjectonLesson.ProjectonLessonReq({
+                            MN: "GETWHERE",
+                            SN: "Project",
+                            where: "pjid=?",
+                            allparam: [filter]
+                        }).then(function (res) {
+                            if (res == "None") {
+                                sap.m.MessageToast.show("Beklenmeye Hata");
+                                CreateComponent.hideBusyIndicator();
+                            }
+                            else {
+                                oModel.setProperty("/projectUp", res)
+                                CreateComponent.hideBusyIndicator();
+                            }
+                        })
+                    } else {
+                        sap.m.MessageToast.show("Hatalı Parametre")
                     }
-                    else {
-                        oModel.setProperty("/projectUp", res)
-                        CreateComponent.hideBusyIndicator();
-                    }
-                })
-            } else {
-                sap.m.MessageToast.show("Hatalı Parametre")
-            }
+                }
+            })
         },
 
     });

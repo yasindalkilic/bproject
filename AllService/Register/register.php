@@ -41,11 +41,11 @@ class Register extends database
     public function DEL($where, $param)
     {
         $db = new Register("root", "", "localhost", "bitirmeproje");
-        $fparam = array();
-        for ($index = 0; $index < count($param); $index++) {
-            array_push($fparam, $param[$index]);
-        }
-        $delete = $db->delete("DELETE FROM registertemp  WHERE $where", $fparam);
+        // $fparam = array();
+        // for ($index = 0; $index < count($param); $index++) {
+        //     array_push($fparam, $param[$index]);
+        // }
+        $delete = $db->delete("DELETE FROM registertemp  WHERE $where IN ($param)");
         if ($delete) {
             $this->result = array("status" => "None");
             return $this->result;

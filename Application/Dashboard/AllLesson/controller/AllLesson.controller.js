@@ -85,40 +85,12 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                 }
                 else {
                     CreateComponent.showBusyIndicator();
-                    var oTable2 = _this.getView().byId("idlessonTable")
                     LessonService.lessonReq({ MN: "GETWHERE", "SN": "Lesson", field: "lesson", where: "sid", allparam: [parseInt(oModel.oData.UserModel[0].sid)] }).then(function (res) {
                         if (res == "None") {
                             CreateComponent.hideBusyIndicator();
                         } else {
                             oModel.setProperty("/allLesson", res)
-                            var oLength = oModel.oData.allLesson.length;
-                            var oActual = oLength / 10;
-                            var oCalculation = (oActual % 1 == 0);
-                            if (oCalculation == true) {
-                                var oValue = oActual;
-                            } else {
-                                var oValue = parseInt(oActual) + 1;
-                            }
-                            oModel.setProperty("/oRows", oModel.oData.allLesson.slice(0, 10));
-                            oTable2.bindRows("/oRows");
-                            if (sap.ui.getCore().byId('pa') != undefined) {
-                                sap.ui.getCore().byId('pa').destroy();
-                            }
-                            var oPaginator = new sap.ui.commons.Paginator("pa", {
-                                numberOfPages: oValue,
-                                page: function (oEvent) {
-                                    var oValue = oEvent;
-                                    var oTargetPage = oEvent.getParameter("targetPage");
-                                    var oTargetValue = oTargetPage * 10;
-                                    var oSourceValue = oTargetValue - 10;
-                                    var oModel = sap.ui.getCore().getModel();
-                                    var oTotalData = oModel.getProperty("/allLesson");
-                                    var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
-                                    oModel.setProperty("/oRows", oSelectedData);
-                                    oTable2.clearSelection();
-                                }
-                            }).addStyleClass("paginatorStyle");
-                            _this.getView().byId("page").addContent(oPaginator)
+                            CreateComponent.tablaPaginator(_this,'idlessonTable',"allLesson",'page');
                             CreateComponent.hideBusyIndicator();
                         }
                     })

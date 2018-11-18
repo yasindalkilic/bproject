@@ -14,6 +14,7 @@
                     <m:SearchField placeholder="Ara .." width="500px" id="searchBar" search="searchTable"/>
                     <m:Button text="" press="getAcceptUser" type="Transparent" icon="sap-icon://refresh" tooltip="Yenile" id="refresh" />
                     <m:Button text="Onayla" press="AddUser" type="Transparent" icon="sap-icon://accept" tooltip="Onayla"  />
+                     <m:Button text="Reddet" press="delRegister" type="Transparent" icon="sap-icon://decline" tooltip="Reddet"  />
                 </m:HBox>
             </m:VBox>
             <Table id="idacceptusers" visibleRowCount="10" selectionMode="MultiToggle" enableColumnReordering='false' ariaLabelledBy="title">
