@@ -384,6 +384,10 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
             _this.byId("fid").setSelectedKey("All")
             _this.getFilter();
         },
+        changePaginator: function (oEvent) {
+            var _this = this
+            CreateComponent.tablaPaginator(_this, 'idprojectAll', "allProject", 'page', parseInt(oEvent.getSource().getSelectedKey()));
+        },
         ProjectOnLesson: function (param) {
             window.open(param);
         },
@@ -415,7 +419,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                                 _this.byId("Meid").setVisible(true)
                                 _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.None);
                                 oModel.setProperty("/allProject", res)
-                                CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page")
+                                CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page",parseInt(_this.byId("rid").getSelectedKey()))
                             
                             }
                             CreateComponent.hideBusyIndicator();
@@ -439,7 +443,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                                 _this.byId("Meid").setVisible(false)
                                 _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.MultiToggle);
                                 oModel.setProperty("/allProject", res)
-                                CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page")
+                                CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page",parseInt(_this.byId("rid").getSelectedKey()))
                             }
                             CreateComponent.hideBusyIndicator();
                         })
@@ -469,7 +473,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             _this.byId("meHeader").setVisible(false);
                             _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.None);
                             oModel.setProperty("/allProject", res)
-                            CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page")
+                            CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page",parseInt(_this.byId("rid").getSelectedKey()))
                             CreateComponent.hideBusyIndicator();
                         }
                     })

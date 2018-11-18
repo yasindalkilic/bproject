@@ -56,11 +56,15 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         } else {
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/acceptuser", res)
-                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page")
+                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page",parseInt(_this.byId("rid").getSelectedKey()))
                         }
                     })
                 }
             })
+        },
+        changePaginator: function (oEvent) {
+            var _this = this
+            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page", parseInt(oEvent.getSource().getSelectedKey()));
         },
         delRegister: function () {
             var _this = this

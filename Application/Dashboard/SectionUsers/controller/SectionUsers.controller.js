@@ -7,6 +7,10 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.getRoute("Dashboard/SectionUsers").attachPatternMatched(_this.onBeforeShow, _this);
         },
+        changePaginator: function (oEvent) {
+            var _this = this
+            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","page", parseInt(oEvent.getSource().getSelectedKey()));
+        },
         searchTable: function (oEvent) {
             var _this = this
             _this.aFilters = [];
@@ -53,7 +57,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             CreateComponent.hideBusyIndicator();
                         } else {
                             oModel.setProperty("/alluser", res)
-                            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","page")
+                            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","page",parseInt(_this.byId("rid").getSelectedKey()))
                             CreateComponent.hideBusyIndicator();
                         }
                     })

@@ -122,7 +122,6 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
                 oModel.oData.RegisterModel.SN = "Register"
                 oModel.oData.RegisterModel.sid = _this.byId("sections").getSelectedKey();
                 oModel.oData.RegisterModel.ogrno = parseInt(oModel.oData.RegisterModel.ogrno)
-                oModel.refresh()
                 RegisterService.RegisterReq(oModel.oData.RegisterModel).then(function (res) {
                     RegisterService.RegisterReq({ "where": 'rtrcode=?', param: [res[0].activationkey], "MN": "GET", "SN": "Register" }).then(function (res) {
                         oModel.setProperty("/userRegister", res);

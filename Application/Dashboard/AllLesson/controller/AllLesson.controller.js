@@ -77,6 +77,10 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                 binding.filter(_this.aFilters, "Application");
             }
         },
+        changePaginator: function (oEvent) {
+            var _this = this
+            CreateComponent.tablaPaginator(_this, 'idlessonTable', "allLesson", 'page', parseInt(oEvent.getSource().getSelectedKey()));
+        },
         allLesson: function () {
             var _this = this
             Servertime.getY().then(function (res) {
@@ -90,7 +94,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             CreateComponent.hideBusyIndicator();
                         } else {
                             oModel.setProperty("/allLesson", res)
-                            CreateComponent.tablaPaginator(_this,'idlessonTable',"allLesson",'page');
+                            CreateComponent.tablaPaginator(_this, 'idlessonTable', "allLesson", 'page', parseInt(_this.byId("rid").getSelectedKey()));
                             CreateComponent.hideBusyIndicator();
                         }
                     })

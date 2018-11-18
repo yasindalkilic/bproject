@@ -78,53 +78,9 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                 binding.filter(_this.aFilters, "Application");
             }
         },
-        allLesson: function () {
+        changePaginator: function (oEvent) {
             var _this = this
-            Servertime.getY().then(function (res) {
-                if (res != new Date().toLocaleDateString().split(".")[2]) {
-                    sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
-                }
-                else {
-                    CreateComponent.showBusyIndicator();
-                    LessonService.lessonReq({ MN: "GETWHERE", "SN": "Lesson", field: "lesson", where: "sid", allparam: [parseInt(oModel.oData.UserModel[0].sid)] }).then(function (res) {
-                        if (res == "None") {
-                            CreateComponent.hideBusyIndicator();
-                        } else {
-                            oModel.setProperty("/allLesson", res)
-                          
-                            var oLength = oModel.oData.allLesson.length;
-                            var oActual = oLength / 10;
-                            var oCalculation = (oActual % 1 == 0);
-                            if (oCalculation == true) {
-                                var oValue = oActual;
-                            } else {
-                                var oValue = parseInt(oActual) + 1;
-                            }
-                            oModel.setProperty("/oRows", oModel.oData.allLesson.slice(0, 10));
-                            oTable2.bindRows("/oRows");
-                            if (sap.ui.getCore().byId('pa') != undefined) {
-                                sap.ui.getCore().byId('pa').destroy();
-                            }
-                            var oPaginator = new sap.ui.commons.Paginator("pa", {
-                                numberOfPages: oValue,
-                                page: function (oEvent) {
-                                    var oValue = oEvent;
-                                    var oTargetPage = oEvent.getParameter("targetPage");
-                                    var oTargetValue = oTargetPage * 10;
-                                    var oSourceValue = oTargetValue - 10;
-                                    var oModel = sap.ui.getCore().getModel();
-                                    var oTotalData = oModel.getProperty("/allLesson");
-                                    var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
-                                    oModel.setProperty("/oRows", oSelectedData);
-                                    oTable2.clearSelection();
-                                }
-                            }).addStyleClass("paginatorStyle");
-                            _this.getView().byId("page").addContent(oPaginator)
-                            CreateComponent.hideBusyIndicator();
-                        }
-                    })
-                }
-            })
+            CreateComponent.tablaPaginator(_this,'idactivesproject',"allProject",'page', parseInt(oEvent.getSource().getSelectedKey()));
         },
         getActiveProject: function () {
             var _this = this
@@ -141,7 +97,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         if (res == "None") {
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/allProject", []);
-                            _this.tablePagination();
+                            oModel.setProperty("/oRows",[]);
                         } else if (res == "") {
                             CreateComponent.hideBusyIndicator();
                             sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
@@ -174,7 +130,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             // }
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/allProject", res)
-                            CreateComponent.tablaPaginator(_this,'idactivesproject',"allProject",'page');
+                            CreateComponent.tablaPaginator(_this,'idactivesproject',"allProject",'page',parseInt(_this.byId("rid").getSelectedKey()));
                                
 
                             // debugger

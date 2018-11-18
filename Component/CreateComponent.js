@@ -19,7 +19,7 @@ CreateComponent = {
             multiInput.setBusy(false);
         } else sap.ui.core.BusyIndicator.hide();
     },
-    tablaPaginator: function (_this, createId, modelname, pagename) {
+    tablaPaginator: function (_this, createId, modelname, pagename,sllength) {
         if (createId) {
             var table = sap.ui.getCore().byId(createId);
             if (_this) {
@@ -27,14 +27,14 @@ CreateComponent = {
                     createId)
             }
             var oLength = oModel.getProperty("/"+modelname).length;
-            var oActual = oLength / 10;
+            var oActual = oLength / sllength;
             var oCalculation = (oActual % 1 == 0);
             if (oCalculation == true) {
                 var oValue = oActual;
             } else {
                 var oValue = parseInt(oActual) + 1;
             }
-            oModel.setProperty("/oRows",  oModel.getProperty("/"+modelname).slice(0, 10));
+            oModel.setProperty("/oRows",  oModel.getProperty("/"+modelname).slice(0, sllength));
             table.bindRows("/oRows");
             if (sap.ui.getCore().byId('pa') != undefined) {
                 sap.ui.getCore().byId('pa').destroy();
@@ -44,8 +44,8 @@ CreateComponent = {
                 page: function (oEvent) {
                     var oValue = oEvent;
                     var oTargetPage = oEvent.getParameter("targetPage");
-                    var oTargetValue = oTargetPage * 10;
-                    var oSourceValue = oTargetValue - 10;
+                    var oTargetValue = oTargetPage * sllength;
+                    var oSourceValue = oTargetValue - sllength;
                     var oModel = sap.ui.getCore().getModel();
                     var oTotalData = oModel.getProperty("/" + modelname);
                     var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
