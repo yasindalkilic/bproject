@@ -21,10 +21,10 @@
                 <m:HBox alignItems="Center" justifyContent="Start" width="100%">
                     <m:Text text="Gösterilecek Kayıt Sayısı :"/>
                     		<m:Select forceSelection="false" id="rid" width="100%" selectedKey="10"  change="changePaginator">
-						<core:Item key="10" text="10" />
-						<core:Item key="25" text="25" />
-						<core:Item key="50" text="50" />
-                        <core:Item key="100" text="100" />
+						<c:Item key="10" text="10" />
+						<c:Item key="25" text="25" />
+						<c:Item key="50" text="50" />
+                        <c:Item key="100" text="100" />
 					</m:Select>
 
                 </m:HBox>

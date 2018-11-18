@@ -347,6 +347,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
             var _this = this
             ActiveProject.ActiveProjReq({ SN: "ActiveProject", MN: "DEL", deldata: deldata }).then(function (res) {
                 if (res == "SuccesDel") {
+                    _this.getFilter();
                     sap.m.MessageToast.show("İşlem Tamamlandı Projeler Kaldırıldı ")
                     _this.byId("idprojectAll").setSelectedIndex(-1)
                     CreateComponent.hideBusyIndicator();
@@ -370,6 +371,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                     CreateComponent.hideBusyIndicator();
                     sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
                 } else {
+                    _this.getFilter();
                     CreateComponent.hideBusyIndicator();
                     _this.byId("idprojectAll").setSelectedIndex(-1)
                     sap.m.MessageToast.show("İşlem Onaylandı")
@@ -469,9 +471,14 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             oModel.setProperty("/allProject", []);
                             sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
                         } else {
-                            // _this.byId("fid").setVisible(false)
-                            _this.byId("meHeader").setVisible(false);
+                       if(_this.byId("segmented").getSelectedKey() == "Me"){
+                        _this.byId("meHeader").setVisible(true);
+                        _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.MultiToggle);
+
+                            }else{
                             _this.byId("idprojectAll").setSelectionMode(sap.ui.table.SelectionMode.None);
+                            _this.byId("meHeader").setVisible(false);
+                            }     
                             oModel.setProperty("/allProject", res)
                             CreateComponent.tablaPaginator(_this,'idprojectAll',"allProject","page",parseInt(_this.byId("rid").getSelectedKey()))
                             CreateComponent.hideBusyIndicator();
