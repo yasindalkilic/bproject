@@ -56,7 +56,6 @@ class ActiveProject extends database
             }
             return $this->result;
         }
-
     }
     function GETWHERE($where, $allparam)
     {
