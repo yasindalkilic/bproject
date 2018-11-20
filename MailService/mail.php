@@ -1,21 +1,23 @@
     <?php
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-
+    include ('../dbclas/pdocls.php');
     $result = array();
     require 'PHPMailer/PHPMailer/src/Exception.php';
     require 'PHPMailer/PHPMailer/src/PHPMailer.php';
     require 'PHPMailer/PHPMailer/src/SMTP.php';
     header("Content-Type: application/json; charset=UTF-8");
     $mail = new PHPMailer(true);
+    $db = new database("root", "", "localhost", "bitirmeproje");
     $result = array();
     try {
+        $sysrows=$db->getrows("SELECT * FROM systemsettings");
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $maildata = $_POST['maildata'];
-        $mail->Username = 'ysndlklc1234@gmail.com';
-        $mail->Password = '13271327';
+        $mail->Username = $sysrows[0]['emailaddres'];
+        $mail->Password =  $sysrows[0]['emailpass'];
         $mail->SMTPSecure = 'tls';
         $mail->Port = 587;
         $mail->CharSet = 'UTF-8';

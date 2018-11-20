@@ -5,15 +5,13 @@ header("Content-Type: application/json; charset=UTF-8");
 class Sections extends database
 {
     public $result = array();
-    public $db;
     public function GETWHERE($where, $allparam, $field)
     {
-        $db = new Sections("root", "", "localhost", "bitirmeproje");
         $fparam = array();
         for ($index = 0; $index < count($allparam); $index++) {
             array_push($fparam, $allparam[$index]);
         }
-        $sectionRows = $db->getrows("SELECT  * FROM  $field WHERE $where=?", $fparam);
+        $sectionRows = $this->getrows("SELECT  * FROM  $field WHERE $where=?", $fparam);
         if (count($sectionRows) == 0) {
             $this->result = array("status" => "None");
             return $this->result;
@@ -26,8 +24,7 @@ class Sections extends database
     }
     public function GET()
     {
-        $db = new Sections("root", "", "localhost", "bitirmeproje");
-        $sectionRows = $db->getrows("SELECT  * FROM  sections");
+        $sectionRows = $this->getrows("SELECT  * FROM  sections");
         if (count($sectionRows) == 0) {
             $this->result = array("status" => "None");
             return $this->result;
@@ -41,8 +38,7 @@ class Sections extends database
     public function GETUS($sid)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new Sections("root", "", "localhost", "bitirmeproje");
-            $sectionuserrows = $db->getrows(
+            $sectionuserrows = $this->getrows(
                 "SELECT * FROM useronsection s INNER JOIN user u on
                 s.uid=u.uid 
                 INNER JOIN mail m on u.uid=m.uid INNER JOIN

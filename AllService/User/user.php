@@ -5,12 +5,10 @@ header("Content-Type: application/json; charset=UTF-8");
 class User extends database
 {
     public $result = array();
-    public $db;
     public function GETUL($tid)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new User("root", "", "localhost", "bitirmeproje");
-            $userLayoutRows = $db->getrows("SELECT  * FROM layout
+            $userLayoutRows = $this->getrows("SELECT  * FROM layout
                     where tid=?", array($tid));
             if (count($userLayoutRows) == 0) {
                 $this->result = array("status" => "None");
@@ -26,9 +24,8 @@ class User extends database
     public function GET($name)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new User("root", "", "localhost", "bitirmeproje");
             $uLT = date("Y.m.d");
-            $userRows = $db->getrows("SELECT  * FROM user u INNER JoIN title t 
+            $userRows = $this->getrows("SELECT  * FROM user u INNER JoIN title t 
         on u.tid=t.tid INNER JoIN authority a on u.uauthr=a.autid
         INNER JOIN useronsection us on us.uid=u.uid INNER JOIN sections sc on sc.sid=us.sid
             where unm=?", array($name));
@@ -46,22 +43,21 @@ class User extends database
     public function ADD($ufnm, $ulnm, $unm, $utel, $upnt, $usno, $upass, $sid, $tid, $uauthr, $email)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new User("root", "", "localhost", "bitirmeproje");
-            $addRows = $db->ekle("INSERT INTO user 
+            $addRows = $this->ekle("INSERT INTO user 
     (ufnm,ulnm,upnt,usno,unm,tid,uauthr) values('$ufnm','$ulnm','$upnt','$usno','$unm','$tid','$uauthr')");
             if ($addRows) {
-                $userRows = $db->getrows("SELECT  * FROM user  where unm=?", array($unm));
+                $userRows = $this->getrows("SELECT  * FROM user  where unm=?", array($unm));
                 $uid = $userRows[0]['uid'];
-                $addpassRows = $db->ekle("INSERT INTO pass 
+                $addpassRows = $this->ekle("INSERT INTO pass 
         (pass,uid) values('$upass',' $uid')");
                 if ($addpassRows) {
-                    $addmailRows = $db->ekle("INSERT INTO mail 
+                    $addmailRows = $this->ekle("INSERT INTO mail 
             (mail,uid) values('$email',' $uid')");
                     if ($addmailRows) {
-                        $addphoneRows = $db->ekle("INSERT INTO phone 
+                        $addphoneRows = $this->ekle("INSERT INTO phone 
                 (pnmbr,uid) values('$utel',' $uid')");
                         if ($addphoneRows) {
-                            $addsectiononLessonRows = $db->ekle("INSERT INTO useronsection (uid,sid) values
+                            $addsectiononLessonRows = $this->ekle("INSERT INTO useronsection (uid,sid) values
                         ('$uid','$sid')");
                             if ($addsectiononLessonRows) {
                                 $this->result = array("status" => "SuccesAdd", "uid" => $uid);
@@ -91,13 +87,12 @@ class User extends database
     public function GAUW($uwhere, $uparam, $mwhere, $mparam, $pwhere, $pparam)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new User("root", "", "localhost", "bitirmeproje");
-            $userWhereRows = $db->getrows("SELECT  * FROM user WHERE $uwhere", array($uparam));
+            $userWhereRows = $this->getrows("SELECT  * FROM user WHERE $uwhere", array($uparam));
             {
                 if (count($userWhereRows) == 0) {
-                    $mailWhereRows = $db->getrows("SELECT  * FROM mail WHERE $mwhere", array($mparam));
+                    $mailWhereRows = $this->getrows("SELECT  * FROM mail WHERE $mwhere", array($mparam));
                     if (count($mailWhereRows) == 0) {
-                        $phoneWhereRows = $db->getrows("SELECT  * FROM phone WHERE $pwhere", array($pparam));
+                        $phoneWhereRows = $this->getrows("SELECT  * FROM phone WHERE $pwhere", array($pparam));
                         if (count($phoneWhereRows) == 0) {
                             $this->result = array("status" => "None");
                             return $this->result;
@@ -119,7 +114,6 @@ class User extends database
     public function ADDRU($userdata)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new User("root", "", "localhost", "bitirmeproje");
             for ($i = 0; $i < count($userdata); $i++) {
                 $ufnm = $userdata[$i]['ufnm'];
                 $ulnm = $userdata[$i]['ulnm'];
@@ -132,21 +126,21 @@ class User extends database
                 $uauthr = $userdata[$i]['uauthr'];
                 $utel = $userdata[$i]['utel'];
                 $sid = $userdata[$i]['sid'];
-                $addRows = $db->ekle("INSERT INTO user 
+                $addRows = $this->ekle("INSERT INTO user 
                 (ufnm,ulnm,upnt,usno,unm,tid,uauthr) values('$ufnm','$ulnm','$upnt','$usno','$unm','$tid','$uauthr')");
                 if ($addRows) {
-                    $userRows = $db->getrows("SELECT  * FROM user  where unm=?", array($unm));
+                    $userRows = $this->getrows("SELECT  * FROM user  where unm=?", array($unm));
                     $uid = $userRows[0]['uid'];
-                    $addpassRows = $db->ekle("INSERT INTO pass 
+                    $addpassRows = $this->ekle("INSERT INTO pass 
                 (pass,uid) values('$upass',' $uid')");
                     if ($addpassRows) {
-                        $addmailRows = $db->ekle("INSERT INTO mail 
+                        $addmailRows = $this->ekle("INSERT INTO mail 
                     (mail,uid) values('$email',' $uid')");
                         if ($addmailRows) {
-                            $addphoneRows = $db->ekle("INSERT INTO phone 
+                            $addphoneRows = $this->ekle("INSERT INTO phone 
                         (pnmbr,uid) values('$utel',' $uid')");
                             if ($addphoneRows) {
-                                $addsectiononLessonRows = $db->ekle("INSERT INTO useronsection (uid,sid) values
+                                $addsectiononLessonRows = $this->ekle("INSERT INTO useronsection (uid,sid) values
                                 ('$uid','$sid')");
                                 if ($addsectiononLessonRows) {
                                     $this->result = array("status" => "SuccesAdd");
@@ -177,8 +171,7 @@ class User extends database
     public function GETPU($pass)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new User("root", "", "localhost", "bitirmeproje");
-            $upassrows = $db->getrows("SELECT  * FROM pass p
+            $upassrows = $this->getrows("SELECT  * FROM pass p
             INNER JOIN user u on p.uid=u.uid
              WHERE  pass=?", array($pass));
                if (count($upassrows) == 0) {

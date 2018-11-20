@@ -28,12 +28,10 @@ sap.ui.define(['sap/ui/core/mvc/Controller'], function (Controller) {
             UseronLogin.outLogin();
         },
         goHomePage:function(){
-            debugger
             window.open("#/Dashboard/Home", "_self");
         },
         DashboardrouterEvent: function (oEvent) {
             var _this = this
-            debugger
             var url = oEvent.getSource().data("url");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(_this);
             oRouter.navTo("Dashboard/"+url)

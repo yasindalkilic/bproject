@@ -1,5 +1,6 @@
 jQuery.sap.require("okul.Application.Project.PprojectServicejs.ProjectOnLessonService");
 jQuery.sap.require("okul.Servicejs.ActiveProjectService");
+jQuery.sap.require("okul.Application.Dashboard.SystemSettings.SystemSettingsServicejs.SystemSettings");
 sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/export/Spreadsheet", "sap/ui/model/Sorter"], function (Controller, Filter, Spreadsheet, Sorter) {
     "use strict";
     return Controller.extend("okul.Application.Dashboard.ProjectSelect.controller.ProjectSelect", {
@@ -80,7 +81,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
         },
         changePaginator: function (oEvent) {
             var _this = this
-            CreateComponent.tablaPaginator(_this,'idactivesproject',"allProject",'page', parseInt(oEvent.getSource().getSelectedKey()));
+            CreateComponent.tablaPaginator(_this, 'idactivesproject', "allProject", 'page', parseInt(oEvent.getSource().getSelectedKey()));
         },
         getActiveProject: function () {
             var _this = this
@@ -92,98 +93,81 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                     CreateComponent.showBusyIndicator();
                     ActiveProject.ActiveProjReq({
                         SN: "ActiveProject",
-                        MN: "GET"
+                        MN: "GETLP"
                     }).then(function (res) {
                         if (res == "None") {
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/allProject", []);
-                            oModel.setProperty("/oRows",[]);
+                            oModel.setProperty("/oRows", []);
                         } else if (res == "") {
                             CreateComponent.hideBusyIndicator();
                             sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
                         } else {
-                            // var filter = window.location.hash.split("?")[1].split("=")[1];
-                            // if (filter.trim() != "") {
-                            //     var data = {
-                            //         "MN": "GETP",
-                            //         where: "pjid=?",
-                            //         param: filter,
-                            //     }
-                            //     Servertime.getY().then(function (res) {
-                            //         if (res != new Date().toLocaleDateString().split(".")[2]) {
-                            //             sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
-                            //         }
-                            //         else {
-                            //             ProjectonLesson.getLessonWhere(data).then(function (res) {
-                            //                 if (res == "None") {
-                            //                     oModel.setProperty("/ProjectOnLesson", [])
-                            //                     CreateComponent.hideBusyIndicator();
-                            //                 } else {
-                            //                     oModel.setProperty("/ProjectOnLesson", res)
-                            //                     CreateComponent.hideBusyIndicator();
-                            //                 }
-                            //             })
-                            //         }
-                            //     })
-                            // } else {
-                            //     sap.m.MessageToast.show("Hatalı Parametre")
-                            // }
                             CreateComponent.hideBusyIndicator();
-                            oModel.setProperty("/allProject", res)
-                            CreateComponent.tablaPaginator(_this,'idactivesproject',"allProject",'page',parseInt(_this.byId("rid").getSelectedKey()));
-                               
+                            var pjid = [];
+                            res.filter(function (x) {
+                                if (!pjid.includes(x.pjid)) {
+                                    pjid.push(x.pjid);
+                                }
+                            })
+                            pjid.sort()
+                            var projdata = []
+                            var data = _.groupBy(res, 'pjid')
+                            for (let index = 0; index < pjid.length; index++) {
+                                var lnm = ""
+                                for (let j = 0; j < data[pjid[index]].length; j++) {
+                                    if (data[pjid[index]].length - 1 == j) {
+                                        lnm += data[pjid[index]][j].lnm
+                                        data[pjid[index]].splice(1, data[pjid[index]].length)
 
-                            // debugger
-                            // var arr = []
-                            // res.filter(function (x) {
-                            //     if (!arr.includes(x.pjid)) {
-                            //         arr.push(x.pjid);
-                            //     }
-                            // })
-                            // debugger
-                            // var data = [];
-                            // var groupedData = _.groupBy(res, 'pjid')
-                            // for (let index = 0; index < arr.length; index++) {
-                            //     for (let j = 0; j < groupedData[arr[index]].length; j++) {
-                            //         if (groupedData[arr[index]].length == 1) {
-                            //             data.push(groupedData[arr[index]]);
-                            //         } else {
-                            //             var result = "";
-                            //             result +=  groupedData[arr[index]][j].lnm+",";
-                            //             groupedData[arr[index]][0].lnm = result;
-                            //             data.push(groupedData[arr[index]])
-                            //             // data.push(groupedData[arr[0]])
-                            //             // data.push(groupedData)
-                            //         }
-                            //     }
-                            // }
-                            debugger
-                            // var data = [];
-                            // var dataIndexResult = 0
-                            // res.filter(function (x, index) {
-                            //     if (!arr.includes(x.pjid)) {
-                            //         dataIndexResult = 0
-                            //         arr.push(x.pjid)
-                            //         data.push(x)
-                            //     } else {
-                            //         dataIndexResult++;
-                            //         var dataIndex = index - dataIndexResult;
-                            //         data[dataIndex].lnm += "," + x.lnm;
-                            //     }
-
-                            // })
-                            // oModel.setProperty("/allProject", data)
-                            // _this.tablePagination();
-                            // CreateComponent.hideBusyIndicator();
+                                    } else {
+                                        lnm += data[pjid[index]][j].lnm + ","
+                                    }
+                                }
+                                data[pjid[index]][0].lnm = ""
+                                data[pjid[index]][0].lnm = lnm
+                                projdata.push(
+                                    data[pjid[index]][0]
+                                )
+                            }
+                            oModel.setProperty("/allProject", projdata)
+                            CreateComponent.tablaPaginator(_this, 'idactivesproject', "allProject", 'page', parseInt(_this.byId("rid").getSelectedKey()));
                         }
                     })
                 }
             })
         },
+        selectionChange: function (oEvent) {
+            debugger
+            var i = parseInt(oModel.oData.SysSettings[0].pjscontenjan);
+            var selected = oEvent.getSource().getSelectedIndices();
+            for (let index = 0; index < selected.length; index++) {
+                if (oEvent.oSource.isIndexSelected(selected[index])) {
+                    i--
+                } else {
+                    i++
+                }
+            }
+            oModel.oData.SysSettings[0].pjscontenjan = i;
+            oModel.refresh()
+            // 
+            // var selected=oEvent.getSource()._oSelection.aSelectedIndices.length;
+            // if(selected.length<oEvent.getSource()._oSelection.aSelectedIndices.length)
+            // = oModel.oData.SysSettings[0].pjscontenjan - oEvent.getSource()._oSelection.aSelectedIndices.length;
+            // oModel.refresh();
+        },
         onBeforeShow: function (argument) {
             var _this = this;
             UseronLogin.onLogin().then(function (res) {
-                // _this.allLesson();
+                SystemService.getSystemSetting({ MN: "GETSYS", SN: "SystemSettings" }).then(function (res) {
+                    if (res == "None") {
+                        oModel.setProperty("/SysSettings", [])
+                    } else if (res == "") {
+                        sap.m.MessageToast.show("Beklenmeyen Hata Lütfen Daha Sonra Tekrar Deneyiniz")
+                    } else {
+                        oModel.setProperty("/SysSettings", res)
+                    }
+                })
                 _this.getActiveProject();
             })
         },

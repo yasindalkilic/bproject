@@ -73,6 +73,8 @@ if ($SN == "ActiveProject") {
         $result = $ap->$MN($_POST['where'], $_POST['allparam']);
     } else if ($MN == "DEL") {
         $result = $ap->$MN($_POST['deldata']);
+    }else if($MN=="GETLP"){
+        $result = $ap->$MN();
     }
     echo json_encode($result);
 }

@@ -50,7 +50,7 @@ CreateComponent = {
                     var oTotalData = oModel.getProperty("/" + modelname);
                     var oSelectedData = oTotalData.slice(oSourceValue, oTargetValue);
                     oModel.setProperty("/oRows", oSelectedData);
-                    table.clearSelection();
+                    // table.clearSelection();
                 }
             }).addStyleClass("paginatorStyle");
             _this.getView().byId(pagename).addContent(oPaginator)

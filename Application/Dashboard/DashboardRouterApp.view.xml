@@ -5,7 +5,7 @@
     xmlns:l="sap.ui.layout" 
     xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" 
     xmlns:f="sap.f" height="100%">
-    <Page enableScrolling="true" showHeader="false">
+    <Page enableScrolling="false" showHeader="false">
     <l:FixFlex class="fixFlexVertical">
         <l:fixContent>
             <tnt:ToolHeader id="rootViewToolHeader" >

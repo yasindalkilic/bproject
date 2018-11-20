@@ -5,12 +5,10 @@ header("Content-Type: application/json; charset=UTF-8");
 class SystemSettings extends database
 {
     public $result = array();
-    public $db;
     function GETSYS()
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new SystemSettings("root", "", "localhost", "bitirmeproje");
-            $sysrows = $db->getrows("SELECT * FROM systemsettings");
+            $sysrows = $this->getrows("SELECT * FROM systemsettings");
             if (count($sysrows) == 0) {
                 $this->result = array("status" => "None");
                 return $this->result;
@@ -25,12 +23,11 @@ class SystemSettings extends database
     function SETSYS($param, $wset)
     {
         if (isset($_SESSION["UNM"])) {
-            $db = new SystemSettings("root", "", "localhost", "bitirmeproje");
             $fparam = array();
             for ($index = 0; $index < count($param); $index++) {
                 array_push($fparam, $param[$index]);
             }
-            $updatesys = $db->update("UPDATE   systemsettings set $wset WHERE ssid=?", $fparam);
+            $updatesys = $this->update("UPDATE   systemsettings set $wset WHERE ssid=?", $fparam);
             if ($updatesys) {
                 $this->result = array("status" => "None");
                 return $this->result;
