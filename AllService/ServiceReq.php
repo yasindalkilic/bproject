@@ -131,6 +131,8 @@ if ($SN == "User") {
         $result = $user->$MN($_POST['uwhere'], $_POST['uparam'], $_POST['mwhere'], $_POST['mparam'], $_POST['pwhere'], $_POST['pparam']);
     } else if ($MN == "ADDRU") {
         $result = $user->$MN($_POST['userdata']);
+    } else if ($MN == "GETPU") {
+        $result = $user->$MN($_POST['pass']);
     }
     echo json_encode($result);
 }
@@ -151,6 +153,16 @@ if ($SN == "Register") {
         $result = $register->$MN($_POST['where'], $_POST['param']);
     } else if ($MN == "DELALL") {
         $result = $register->$MN();
+    }
+    echo json_encode($result);
+}
+if ($SN == "SystemSettings") {
+    include("/SystemSettings/systemsettings.php");
+    $settings = new $SN();
+    if ($MN == "SETSYS") {
+        $result = $settings->$MN($_POST['param'],$_POST['wset']);
+    } else if ($MN == "GETSYS") {
+        $result = $settings->$MN();
     }
     echo json_encode($result);
 }

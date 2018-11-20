@@ -50,6 +50,7 @@ class ActiveProject extends database
                         "apuid" => $activeProject[$i]['apuid'],
                         "uid" => $activeProject[$i]["uid"],
                         "ufnm" => $activeProject[$i]["ufnm"] . " " . $activeProject[$i]["ulnm"],
+                        "pjquota" => $activeProject[$i]["pjquota"],
                     );
                 }
             }
@@ -83,6 +84,7 @@ class ActiveProject extends database
                         "apperiod" => $activeProjectRow[$i]["apperiod"],
                         "uflag" => $activeProjectRow[$i]["uflag"],
                         "apuid" => $activeProjectRow[$i]['apuid'],
+                        "pjquota" => $activeProjectRow[$i]["pjquota"],
                     );
                 }
                 return $this->result;

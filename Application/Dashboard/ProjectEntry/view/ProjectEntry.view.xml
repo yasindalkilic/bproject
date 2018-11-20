@@ -71,6 +71,13 @@
                                             </HBox>
                                         </VBox>
                                     </HBox>
+                                                  <HBox alignItems="Center" justifyContent="Stretch" width="100%" class="sapUiTinyMarginTop">
+                                        <Text width="130px" text="Proje Kontenjan"/>
+                                        <Label text=":" width="10px" />
+                                        <VBox width="100%">
+                                        <Input value="{/projectModel/0/pjquota}"/>
+                                        </VBox>
+                                    </HBox>
                                     <HBox width="100%" alignItems="Center" justifyContent="End" class="sapUiTinyMarginTop">
                                         <Button id="save" press="onSaveData" type="Default" text="Kaydet" tooltip="Kaydet" />
                                     </HBox>

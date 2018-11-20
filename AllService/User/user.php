@@ -174,5 +174,24 @@ class User extends database
         }
         return $this->result;
     }
+    public function GETPU($pass)
+    {
+        if (isset($_SESSION["UNM"])) {
+            $db = new User("root", "", "localhost", "bitirmeproje");
+            $upassrows = $db->getrows("SELECT  * FROM pass p
+            INNER JOIN user u on p.uid=u.uid
+             WHERE  pass=?", array($pass));
+               if (count($upassrows) == 0) {
+                $this->result = array("status" => "None");
+                return $this->result;
+            } else {
+                for ($i = 0; $i < count($upassrows); $i++) {
+                    $this->result[] = array("Status" => "Okey", "uid" => $upassrows[$i]['uid'], "ufnm" => $upassrows[$i]['ufnm'], "ulnm" => $upassrows[$i]["ulnm"], "unm" => $upassrows[$i]["unm"], "upnt" => $upassrows[$i]["upnt"], "usno" => $upassrows[$i]["usno"], "tid" => $upassrows[$i]["tid"], "uauthr" => $upassrows[$i]["uauthr"]);
+                }
+                return $this->result;
+            }
+
+        }
+    }
 }
 ?>

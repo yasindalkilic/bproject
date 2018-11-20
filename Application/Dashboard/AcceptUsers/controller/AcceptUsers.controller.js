@@ -56,7 +56,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         } else {
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/acceptuser", res)
-                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page",parseInt(_this.byId("rid").getSelectedKey()))
+                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page", parseInt(_this.byId("rid").getSelectedKey()))
                         }
                     })
                 }
@@ -70,9 +70,14 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
             var _this = this
             var Table = _this.byId("idacceptusers");
             var rdata = []
+            var mdata = []
             var selected = Table.getSelectedIndices();
             for (let index = 0; index < Table.getSelectedIndices().length; index++) {
                 var spath = _this.byId("idacceptusers").getRows()[selected[index]]._getBindingContext().sPath
+                mdata.push({
+                    "mail": oModel.getProperty(spath).rtemail,
+                    "messega": "Kaydınız  Onaylandı Şifreniz TC KİMLİK NUMARANIZ olarak Belirlenmiştir."
+                })
                 rdata.push({
                     rtemail: oModel.getProperty(spath).rtemail,
                     rid: oModel.getProperty(spath).rtid
@@ -100,10 +105,8 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         if (res == "SuccesDel") {
                             CreateComponent.hideBusyIndicator();
                             sap.m.MessageToast.show("İşlem Başarıyla Gerçekleşti")
-                            for (let index = 0; index < rdata.length; index++) {
-                                MailService.AddMail({ "mail": rdata[index].rtemail, "messega": "Kaydınız  Onaylandı Şifreniz TC KİMLİK NUMARANIZ olarak Belirlenmiştir." }).then(function (res) {
-                                })
-                            }
+                            MailService.AddMail({maildata: mdata }).then(function (res) {
+                            })
                             _this.getAcceptUser();
                         } else if (res == "None") {
                             sap.m.MessageToast.show("Lütfen Daha Sonra Tekrar Deneyin")

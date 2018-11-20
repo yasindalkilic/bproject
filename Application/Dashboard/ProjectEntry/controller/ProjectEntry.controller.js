@@ -14,10 +14,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                 pjnm: "",
                 psd: "",
                 ptek: "",
-                pperiod: new Date().toLocaleDateString("tr-TR")
+                pperiod: new Date().toLocaleDateString("tr-TR"),
+                pjquota: ""
             }])
         },
         checkValidate: function () {
+            debugger
             var result = [false, ""]
             if (oModel.oData.projectModel[0].pjnm.trim() == "" || oModel.oData.projectModel[0].pjnm.trim().length < 3) {
                 result = [false, "project"];
@@ -26,6 +28,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
             }
             else if (oModel.oData.projectModel[0].ptek.trim() == "") {
                 result = [false, "ptek"];
+            }
+            else if (isNaN(oModel.oData.projectModel[0].pjquota)) {
+                result = [false, "pquota"];
             }
             else {
                 result = [true, "validate"]
@@ -234,7 +239,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
         },
         onSaveData: function () {
             var _this = this
-            if (oModel.oData.selectedLess == undefined || oModel.oData.selectedLess.length == 0 ) {
+            if (oModel.oData.selectedLess == undefined || oModel.oData.selectedLess.length == 0) {
                 sap.m.MessageToast.show("Lütfen Ders Seçimi Yapınız");
             } else if (_this.checkValidate()[0] == false && _this.checkValidate()[1] == "project") {
                 sap.m.MessageToast.show("Lütfen Proje Alanını Doldurun.")
@@ -242,7 +247,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                 sap.m.MessageToast.show("Lütfen Proje Açıklamasını Giriniz.")
             } else if (_this.checkValidate()[0] == false && _this.checkValidate()[1] == "ptek") {
                 sap.m.MessageToast.show("Lütfen Proje Teknolojilerini Seçiniz.")
-            } else {
+            }
+            else if (_this.checkValidate()[0] == false && _this.checkValidate()[1] == "pquota") {
+                sap.m.MessageToast.show("Proje Kontenjanına Lütfen Sayı Giriniz")
+            }
+            else {
                 Servertime.getY().then(function (res) {
                     if (res != new Date().toLocaleDateString().split(".")[2]) {
                         sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
@@ -261,6 +270,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                                     ptek: oModel.oData.projectModel[0].ptek.toUpperCase(),
                                     pperiod: oModel.oData.projectModel[0].pperiod.split('.')[2],
                                     pselect: "",
+                                    pjquota:oModel.oData.projectModel[0].pjquota
                                 }];
                                 var lessonData = []
                                 for (let index = 0; index < oModel.oData.selectedLess.length; index++) {
@@ -281,7 +291,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                                             pjnm: "",
                                             psd: "",
                                             ptek: "",
-                                            pperiod: new Date().toLocaleDateString("tr-TR")
+                                            pperiod: new Date().toLocaleDateString("tr-TR"),
+                                            pjquota: ""
                                         }])
                                     } else {
                                         sap.m.MessageToast.show("Kayıt Başarıyla Gerçekleşti.")
@@ -292,6 +303,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                                             psd: "",
                                             ptek: "",
                                             pperiod: new Date().toLocaleDateString("tr-TR"),
+                                            pjquota: ""
                                         }])
                                     }
 

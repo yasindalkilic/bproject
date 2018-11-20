@@ -17,18 +17,7 @@
                      <m:Button text="Reddet" press="delRegister" type="Transparent" icon="sap-icon://decline" tooltip="Reddet"  />
                 </m:HBox>
             </m:VBox>
-                <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
-                <m:HBox alignItems="Center" justifyContent="Start" width="100%">
-                    <m:Text text="Gösterilecek Kayıt Sayısı :"/>
-                    		<m:Select forceSelection="false" id="rid" width="100%" selectedKey="10"  change="changePaginator">
-						<c:Item key="10" text="10" />
-						<c:Item key="25" text="25" />
-						<c:Item key="50" text="50" />
-                        <c:Item key="100" text="100" />
-					</m:Select>
-
-                </m:HBox>
-            </m:VBox>
+             
             <Table id="idacceptusers" visibleRowCount="10" selectionMode="MultiToggle" enableColumnReordering='false' ariaLabelledBy="title">
                 <columns >
                     <Column width="9rem">
@@ -69,6 +58,18 @@
                     </Column>
                 </columns>
             </Table>
+               <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
+                <m:HBox alignItems="Center" justifyContent="Start" width="100%">
+                    <m:Text text="Gösterilecek Kayıt Sayısı :"/>
+                    		<m:Select forceSelection="false" id="rid" width="100%" selectedKey="10"  change="changePaginator">
+						<c:Item key="10" text="10" />
+						<c:Item key="25" text="25" />
+						<c:Item key="50" text="50" />
+                        <c:Item key="100" text="100" />
+					</m:Select>
+
+                </m:HBox>
+            </m:VBox>
         </m:content>
     </m:Page>
 </mvc:View>

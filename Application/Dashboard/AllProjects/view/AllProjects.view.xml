@@ -39,18 +39,7 @@
 					</m:Select>
 				</m:VBox>
 			</m:VBox>
-			     <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
-                <m:HBox alignItems="Center" justifyContent="Start" width="100%">
-                    <m:Text text="Gösterilecek Kayıt Sayısı :"/>
-                    		<m:Select forceSelection="false" id="rid" width="100%" selectedKey="10"  change="changePaginator">
-						<core:Item key="10" text="10" />
-						<core:Item key="25" text="25" />
-						<core:Item key="50" text="50" />
-                        <core:Item key="100" text="100" />
-					</m:Select>
-
-                </m:HBox>
-            </m:VBox>
+			   
 			<m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
 				<m:HBox alignItems="Center" justifyContent="Start" width="100%">
 					<m:Toolbar id="meHeader" visible="false">
@@ -115,8 +104,25 @@
 							<m:Text text="{apperiod}" />
 						</template>
 					</Column>
+						<Column width="9rem">
+						<m:Label text="Proje Kontenjan" />
+						<template>
+							<m:Text text="{pjquota}" />
+						</template>
+					</Column>
 				</columns>
 			</Table>
+			  <m:VBox width="100%" alignItems="Stretch" justifyContent="Center">
+                <m:HBox alignItems="Center" justifyContent="Start" width="100%">
+                    <m:Text text="Gösterilecek Kayıt Sayısı :"/>
+                    		<m:Select forceSelection="false" id="rid" width="100%" selectedKey="10"  change="changePaginator">
+						<core:Item key="10" text="10" />
+						<core:Item key="25" text="25" />
+						<core:Item key="50" text="50" />
+                        <core:Item key="100" text="100" />
+					</m:Select>
+                </m:HBox>
+            </m:VBox>
 		</m:content>
 	</m:Page>
 </mvc:View>

@@ -38,6 +38,13 @@
                                 <Input enabled="{/enb}" width="100%" value="{/projectUp/0/pjtechnology}"/>
                             </VBox>
                         </HBox>
+                           <HBox alignItems="Center" justifyContent="Stretch" width="100%" class="sapUiTinyMarginTop">
+                            <Label width="130px" text="Proje Kontenjan"/>
+                            <Label text=":" width="10px" />
+                            <VBox width="100%" alignItems="Stretch" justifyContent="Stretch">
+                                <Input enabled="{/enb}" width="100%" value="{/projectUp/0/pjquota}"/>
+                            </VBox>
+                        </HBox>
                         <HBox alignItems="Center" justifyContent="Stretch" width="100%" class="sapUiTinyMarginTop">
                             <Label width="130px" text="İlgili Dersler	"/>
                             <Label text=":" width="10px" />

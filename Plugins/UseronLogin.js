@@ -83,6 +83,20 @@ var UseronLogin = {
         sessionStorage.clear();
         window.open("/okul/#/Login", "_self");
     },
+    onPass: function (param) {
+        var deferred = new Promise(function (resolve, reject) {
+            loginService.getUserData(param).then(function (res) {
+                if (res == "None") {
+                    resolve(false)
+                    sap.m.MessageToast.show("Şifreniz Onaylanmadı");
+                } else {
+                    resolve(true);
+                }
+                resolve(false)
+            })
+        })
+        return deferred;
+    },
     onLoginControl: function (param) {
         localStorage.clear();
         sessionStorage.clear();

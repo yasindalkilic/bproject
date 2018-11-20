@@ -73,6 +73,7 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/export/Spreadsheet", 'sap/u
             })
         },
         onLessonTransaction: function (oEvent) {
+            debugger
             var _this = this
             var newLes = [];
             var result = [];
@@ -156,10 +157,12 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/export/Spreadsheet", 'sap/u
                     }
                 }
                 else {
-                    _this.updateProject();
+       
                 }
             }
-
+            else{
+                _this.updateProject();
+            }
         },
         ProjectAPL: function (param) {
             var _this = this
@@ -219,30 +222,35 @@ sap.ui.define(["sap/ui/core/mvc/Controller", "sap/ui/export/Spreadsheet", 'sap/u
                 if (res != new Date().toLocaleDateString().split(".")[2]) {
                     sap.m.MessageToast.show("Lütfen Bilgisayarınızın Tarih Ve Saatini Güncelleyiniz.")
                 } else {
-                    var filterU = window.location.hash.split("?")[1].split("=")[1];
-                    var filter = {}
-                    filter.SN = "Project",
-                        filter.MN = "SET",
-                        filter.wparam = filterU,
-                        filter.operation = "IN",
-                        filter.wset = "pjnm=?,pjtechnology=?,pjcntn=?  ",
-                        filter.wsetparam = [
-                            oModel.oData.projectUp[0].pjnm.toUpperCase(),
-                            oModel.oData.projectUp[0].pjtechnology.toUpperCase(),
-                            oModel.oData.projectUp[0].pjcntn.toUpperCase(),
-                        ]
-                    filter.setfield = "pjid"
-                    ProjectonLesson.ProjectonLessonReq(filter).then(function (res) {
-                        if (res == "SuccedUpdate") {
-                            sap.m.MessageToast.show("Kayıt Güncellendi");
-                            oModel.setProperty("/enb", false);
-                            _this.getProject();
-                        } else if (res == "") {
-                            sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
-                        } else {
-                            sap.m.MessageToast.show("Kayıt Güncellenirken Hata Oluştu");
-                        }
-                    })
+                    if (isNaN(oModel.oData.projectUp[0].pjquota)) {
+                        sap.m.MessageToast.show("Lütfen Kontenjan Alanına Sayı Giriniz")
+                    } else {
+                        var filterU = window.location.hash.split("?")[1].split("=")[1];
+                        var filter = {}
+                        filter.SN = "Project",
+                            filter.MN = "SET",
+                            filter.wparam = filterU,
+                            filter.operation = "IN",
+                            filter.wset = "pjnm=?,pjtechnology=?,pjcntn=?,pjquota=?  ",
+                            filter.wsetparam = [
+                                oModel.oData.projectUp[0].pjnm.toUpperCase(),
+                                oModel.oData.projectUp[0].pjtechnology.toUpperCase(),
+                                oModel.oData.projectUp[0].pjcntn.toUpperCase(),
+                                oModel.oData.projectUp[0].pjquota
+                            ]
+                        filter.setfield = "pjid"
+                        ProjectonLesson.ProjectonLessonReq(filter).then(function (res) {
+                            if (res == "SuccedUpdate") {
+                                sap.m.MessageToast.show("Kayıt Güncellendi");
+                                oModel.setProperty("/enb", false);
+                                _this.getProject();
+                            } else if (res == "") {
+                                sap.m.MessageToast.show("Sunucuda Hata Gerçekleşti Lütfen Daha Sonra Tekrar Deneyin.")
+                            } else {
+                                sap.m.MessageToast.show("Kayıt Güncellenirken Hata Oluştu");
+                            }
+                        })
+                    }
                 }
             })
         },

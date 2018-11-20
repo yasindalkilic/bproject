@@ -127,7 +127,7 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
                         oModel.setProperty("/userRegister", res);
                         oModel.setProperty("/RegisterModel", [])
                         var msg = "Aktivitasyon kodu :" + oModel.oData.userRegister[0].rtrcode + "Kaydınız Onaylandıktan Sonra Size Mail İle Bildirim Yapılacaktır.";
-                        MailService.AddMail({ "mail": oModel.oData.userRegister[0].rtemail, "messega": msg }).then(function (res) {
+                        MailService.AddMail({ "maildata": [{ "mail": oModel.oData.userRegister[0].rtemail, "messega": msg }] }).then(function (res) {
                             if (res == "None") {
                                 resolve(false);
                                 sap.m.MessageToast.show("Mail Gönderilirken Bir Hata Oluştu");

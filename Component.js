@@ -149,6 +149,17 @@ sap.ui.define(
                   cache: {
                     keys: [version]
                   }
+                },
+                {
+                  pattern: "Dashboard/SystemSettings",
+                  viewPath: "okul.Application.Dashboard.SystemSettings.view",
+                  name: "Dashboard/SystemSettings",
+                  view: "SystemSettings",
+                  targetControl: "DashboardRouterId",
+                  transition: "show",
+                  cache: {
+                    keys: [version]
+                  }
                 }]
             },
             {

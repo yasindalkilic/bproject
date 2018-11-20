@@ -1,24 +1,23 @@
 <?php
 session_start();
-require_once ('../dbclas/pdocls.php');
+require_once('../dbclas/pdocls.php');
 header("Content-Type: application/json; charset=UTF-8");
 class Project extends database
 {
 
-    public $result = array ();
+    public $result = array();
     public $db;
     public function GET()
     {
-        if (isset ($_SESSION["UNM"])) {
+        if (isset($_SESSION["UNM"])) {
             $db = new Project("root", "", "localhost", "bitirmeproje");
             $allProjectRows = $db->getrows("SELECT  * FROM  projectall p INNER JoIN user u on p.uid=u.uid");
             if (count($allProjectRows) == 0) {
-                $this->result = array ("status" => "None");
+                $this->result = array("status" => "None");
                 return $this->result;
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($allProjectRows); $i++) {
-                    $this->result[] = array (
+                    $this->result[] = array(
                         "status" => "Okey",
                         "pjid" => $allProjectRows[$i]['pjid'],
                         "pjnm" => $allProjectRows[$i]['pjnm'],
@@ -27,6 +26,7 @@ class Project extends database
                         "pjperiod" => $allProjectRows[$i]["pjperiod"],
                         "uid" => $allProjectRows[$i]["uid"],
                         "ufnm" => $allProjectRows[$i]["ufnm"] . " " . $allProjectRows[$i]["ulnm"],
+                        "pjquota" => $allProjectRows[$i]["pjquota"],
                     );
                 }
             }
@@ -35,20 +35,19 @@ class Project extends database
     }
     public function GETWHERE($where, $allparam)
     {
-        if (isset ($_SESSION["UNM"])) {
+        if (isset($_SESSION["UNM"])) {
             $db = new Project("root", "", "localhost", "bitirmeproje");
-            $fparam = array ();
+            $fparam = array();
             for ($index = 0; $index < count($allparam); $index++) {
                 array_push($fparam, $allparam[$index]);
             }
             $allProjectRows = $db->getrows("SELECT  * FROM  projectall p WHERE $where", $fparam);
             if (count($allProjectRows) == 0) {
-                $this->result = array ("status" => "None");
+                $this->result = array("status" => "None");
                 return $this->result;
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($allProjectRows); $i++) {
-                    $this->result[] = array (
+                    $this->result[] = array(
                         "status" => "Okey",
                         "pjid" => $allProjectRows[$i]['pjid'],
                         "pjnm" => $allProjectRows[$i]['pjnm'],
@@ -56,6 +55,7 @@ class Project extends database
                         "pjcntn" => $allProjectRows[$i]["pjcntn"],
                         "pjperiod" => $allProjectRows[$i]["pjperiod"],
                         "uid" => $allProjectRows[$i]["uid"],
+                        "pjquota" => $allProjectRows[$i]["pjquota"],
                     );
                 }
                 return $this->result;
@@ -64,26 +64,25 @@ class Project extends database
     }
     public function SET($wparam, $operation, $wset, $wsetparam, $setfield)
     {
-        if (isset ($_SESSION["UNM"])) {
-            $fparam = array ();
+        if (isset($_SESSION["UNM"])) {
+            $fparam = array();
             for ($index = 0; $index < count($wsetparam); $index++) {
                 array_push($fparam, $wsetparam[$index]);
             }
             $db = new Project("root", "", "localhost", "bitirmeproje");
             $upP = $db->update("UPDATE   projectall set $wset WHERE $setfield $operation ($wparam)", $fparam);
             if ($upP) {
-                $this->result = array ("status" => "None");
+                $this->result = array("status" => "None");
                 return $this->result;
-            }
-            else {
-                $this->result = array ("status" => "SuccedUpdate");
+            } else {
+                $this->result = array("status" => "SuccedUpdate");
                 return $this->result;
             }
         }
     }
     public function ADD($lessondata, $pjdata)
     {
-        if (isset ($_SESSION["UNM"])) {
+        if (isset($_SESSION["UNM"])) {
             $db = new Project("root", "", "localhost", "bitirmeproje");
             $uid = $pjdata[0]['uid'];
             $pjnm = $pjdata[0]['pjnm'];
@@ -91,10 +90,11 @@ class Project extends database
             $ptek = $pjdata[0]['ptek'];
             $pperiod = $pjdata[0]['pperiod'];
             $pselect = $pjdata[0]['pselect'];
-            $addRows = $db->ekle("INSERT INTO projectall (uid,pjnm,pjtechnology,pjcntn,pjperiod)
-             values('$uid','$pjnm','$ptek','$psd','$pperiod')");
+            $pquota = $pjdata[0]['pjquota'];
+            $addRows = $db->ekle("INSERT INTO projectall (uid,pjnm,pjtechnology,pjcntn,pjperiod,pjquota)
+             values('$uid','$pjnm','$ptek','$psd','$pperiod','$pquota')");
             if ($addRows) {
-                $projectRows = $db->getrows("SELECT  * FROM  projectall WHERE uid=?", array ($uid));
+                $projectRows = $db->getrows("SELECT  * FROM  projectall WHERE uid=?", array($uid));
                 $lastindex = count($projectRows) - 1;
                 $lastData = $projectRows[$lastindex]['pjid'];
                 for ($i = 0; $i < count($lessondata); $i++) {
@@ -103,36 +103,32 @@ class Project extends database
                     values('$lastData','$addLess')");
                 }
                 if ($addlessRows) {
-                    $this->result = array ("status" => "SuccesAdd");
+                    $this->result = array("status" => "SuccesAdd");
                     return $this->result;
 
-                }
-                else {
-                    $this->result = array ("status" => "None");
+                } else {
+                    $this->result = array("status" => "None");
                     return $this->result;
                 }
-            }
-            else {
-                $this->result = array ("status" => "None");
+            } else {
+                $this->result = array("status" => "None");
                 return $this->result;
             }
-        }
-        else {
-            $this->result = array ("status" => "None");
+        } else {
+            $this->result = array("status" => "None");
             return $this->result;
         }
     }
-    public function DEL($pjid,$where)
+    public function DEL($pjid, $where)
     {
-        if (isset ($_SESSION["UNM"])) {
+        if (isset($_SESSION["UNM"])) {
             $db = new Project("root", "", "localhost", "bitirmeproje");
             $del = $db->delete("DELETE FROM  projectall WHERE $where", array($pjid));
             if ($del) {
-                $this->result = array ("status" => "None");
+                $this->result = array("status" => "None");
                 return $this->result;
-            }
-            else {
-                $this->result = array ("status" => "SuccesDel");
+            } else {
+                $this->result = array("status" => "SuccesDel");
                 return $this->result;
             }
         }

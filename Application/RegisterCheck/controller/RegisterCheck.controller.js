@@ -21,16 +21,16 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/json/JSONModel', 'sap
             lid.setText(i--)
             if (lid.getText() == "0") {
                 clearInterval(timeControl);
-                if (oModel.oData.userRegister != undefined) {
-                    if (oModel.oData.userRegister[0].rtrcode) {
-                        var param = "'" + oModel.oData.userRegister[0].rtrcode + "'";
-                        UserServices.UserReq({ SN: "Register", MN: "DEL", where: "rtrcode", param: param }).then(function (res) {
-                        })
-                    }
-                } else {
-                    UserServices.UserReq({ SN: "Register", MN: "DELALL" }).then(function (res) {
-                    })
-                }
+                // if (oModel.oData.userRegister != undefined) {
+                //     if (oModel.oData.userRegister[0].rtrcode) {
+                //         var param = "'" + oModel.oData.userRegister[0].rtrcode + "'";
+                //         UserServices.UserReq({ SN: "Register", MN: "DEL", where: "rtrcode", param: param }).then(function (res) {
+                //         })
+                //     }
+                // } else {
+                //     UserServices.UserReq({ SN: "Register", MN: "DELALL" }).then(function (res) {
+                //     })
+                // }
                 delete oModel.oData.userRegister
                 lid.setText("")
                 UseronLogin.outLogin();
