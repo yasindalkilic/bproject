@@ -53,7 +53,7 @@ CreateComponent = {
                     // table.clearSelection();
                 }
             }).addStyleClass("paginatorStyle");
-            _this.getView().byId(pagename).addContent(oPaginator)
+            _this.getView().byId(pagename).addItem(oPaginator)
         }
     }
 }
