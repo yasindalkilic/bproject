@@ -44,7 +44,7 @@
                                         <Label width="120px" text="Ünvan Seç"/>
                                         <Label text=":" width="10px" />
                                         <VBox width="100%">
-                                            <Select forceSelection="false" id="tid" width="100%" selectedKey="{/title/0/tid}" items="{
+                                            <Select forceSelection="false "  change="onstudent" id="tid" width="100%" selectedKey="{/title/0/tid}" items="{
 						path: '/title'
 					}">
                                                 <core:Item key="{tid}" text="{tnm}" />
@@ -94,6 +94,13 @@
                                         <Label text=":" width="10px" />
                                         <VBox width="100%">
                                             <Input width="100%" type="Password" value="{/AddUser/0/upass}" />
+                                        </VBox>
+                                    </HBox>
+                                      <HBox  visible="false" id="usnoid" alignItems="Center" justifyContent="Stretch" width="100%" class="sapUiTinyMarginTop">
+                                        <Label width="120px" text="Öğrenci Numarası"/>
+                                        <Label text=":" width="10px" />
+                                        <VBox width="100%">
+                                           <MaskInput mask = "9999999999" width="100%" value="{/AddUser/0/usno}" />
                                         </VBox>
                                     </HBox>
                                     <HBox alignItems="Center" justifyContent="End" width="100%" class="sapUiTinyMarginTop">

@@ -1,3 +1,4 @@
+jQuery.sap.require("okul.Application.Dashboard.SystemSettings.SystemSettingsServicejs.SystemSettings");
 jQuery.sap.require("okul.Servicejs.MailService");
 jQuery.sap.require("okul.Servicejs.UserService");
 jQuery.sap.require("okul.Application.Register.RegisterServicejs.RegisterService");
@@ -56,7 +57,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         } else {
                             CreateComponent.hideBusyIndicator();
                             oModel.setProperty("/acceptuser", res)
-                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page", parseInt(_this.byId("rid").getSelectedKey()))
+                            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "footerToolbar", parseInt(_this.byId("rid").getSelectedKey()))
                         }
                     })
                 }
@@ -64,7 +65,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
         },
         changePaginator: function (oEvent) {
             var _this = this
-            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "page", parseInt(oEvent.getSource().getSelectedKey()));
+            CreateComponent.tablaPaginator(_this, 'idacceptusers', "acceptuser", "footerToolbar", parseInt(oEvent.getSource().getSelectedKey()));
         },
         delRegister: function () {
             var _this = this
@@ -105,7 +106,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         if (res == "SuccesDel") {
                             CreateComponent.hideBusyIndicator();
                             sap.m.MessageToast.show("İşlem Başarıyla Gerçekleşti")
-                            MailService.AddMail({maildata: mdata }).then(function (res) {
+                            MailService.AddMail({ maildata: mdata }).then(function (res) {
                             })
                             _this.getAcceptUser();
                         } else if (res == "None") {
@@ -128,6 +129,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                         for (let index = 0; index < Table.getSelectedIndices().length; index++) {
                             var spath = _this.byId("idacceptusers").getRows()[selected[index]]._getBindingContext().sPath
                             data.push({
+
                                 SN: "User",
                                 ufnm: oModel.getProperty(spath).rtnm,
                                 ulnm: oModel.getProperty(spath).rtlnm,
@@ -140,7 +142,8 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                                 sid: parseInt(oModel.getProperty(spath).sid),
                                 unm: oModel.getProperty(spath).rtsno,
                                 upass: md5(oModel.getProperty(spath).rttcno),
-                                MN: "ADDRU"
+                                MN: "ADDRU",
+                                quotaremain: oModel.oData.SysSettings[0].pjscontenjan,
                             })
                         }
                         UserServices.UserReq({ MN: "ADDRU", SN: "User", userdata: data }).then(function (res) {
@@ -162,6 +165,15 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
         onBeforeShow: function (argument) {
             var _this = this;
             UseronLogin.onLogin().then(function (res) {
+                SystemService.getSystemSetting({ MN: "GETSYS", SN: "SystemSettings" }).then(function (res) {
+                    if (res == "None") {
+                        oModel.setProperty("/SysSettings", [])
+                    } else if (res == "") {
+                        sap.m.MessageToast.show("Beklenmeyen Hata Lütfen Daha Sonra Tekrar Deneyiniz")
+                    } else {
+                        oModel.setProperty("/SysSettings", res)
+                    }
+                })
                 _this.getAcceptUser();
             })
         },

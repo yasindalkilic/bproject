@@ -128,7 +128,7 @@ if ($SN == "User") {
     } else if ($MN == "GET") {
         $result = $user->$MN($_POST['name']);
     } else if ($MN == "ADD") {
-        $result = $user->$MN($_POST['ufnm'], $_POST['ulnm'], $_POST['unm'], $_POST['utel'], $_POST['upnt'], $_POST['usno'], $_POST['upass'], $_POST['sid'], $_POST['tid'], $_POST['uauthr'], $_POST['email']);
+        $result = $user->$MN($_POST['ufnm'], $_POST['ulnm'], $_POST['unm'], $_POST['utel'], $_POST['upnt'], $_POST['usno'], $_POST['upass'], $_POST['sid'], $_POST['tid'], $_POST['uauthr'], $_POST['email'],$_POST['quotaremain']);
     } else if ($MN == "GAUW") {
         $result = $user->$MN($_POST['uwhere'], $_POST['uparam'], $_POST['mwhere'], $_POST['mparam'], $_POST['pwhere'], $_POST['pparam']);
     } else if ($MN == "ADDRU") {

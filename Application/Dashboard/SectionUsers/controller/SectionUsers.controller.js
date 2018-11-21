@@ -9,7 +9,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
         },
         changePaginator: function (oEvent) {
             var _this = this
-            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","page", parseInt(oEvent.getSource().getSelectedKey()));
+            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","footerToolbar", parseInt(oEvent.getSource().getSelectedKey()));
         },
         searchTable: function (oEvent) {
             var _this = this
@@ -57,7 +57,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                             CreateComponent.hideBusyIndicator();
                         } else {
                             oModel.setProperty("/alluser", res)
-                            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","page",parseInt(_this.byId("rid").getSelectedKey()))
+                            CreateComponent.tablaPaginator(_this,'iduserTable',"alluser","footerToolbar",parseInt(_this.byId("rid").getSelectedKey()))
                             CreateComponent.hideBusyIndicator();
                         }
                     })

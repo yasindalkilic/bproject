@@ -68,13 +68,13 @@
 							<Column width="9rem" visible="true" id="Meid">
 								<m:Label text="Proje Öneri Sahibi" />
 								<template>
-									<m:Text wrapping="false" text="{ufnm}" />
+									<m:Text wrapping="false" tooltip="{ufnm}" text="{ufnm}" />
 								</template>
 							</Column>
 							<Column width="9rem">
 								<m:Label text="Proje Adı" />
 								<template>
-									<m:Text wrapping="false" text="{pjnm}" />
+									<m:Text wrapping="false"  tooltip="{pjnm}" text="{pjnm}" />
 								</template>
 							</Column>
 							<Column width="9rem">
@@ -86,7 +86,7 @@
 							<Column width="9rem">
 								<m:Label text="Proje Teknolojileri" />
 								<template>
-									<m:Text wrapping="false" text="{pjtechnology}" />
+									<m:Text wrapping="false"  tooltip="{pjtechnology}" text="{pjtechnology}" />
 								</template>
 							</Column>
 							<Column width="9rem">
@@ -112,7 +112,7 @@
 					<m:HBox class="footerToolbar" alignItems="Center" justifyContent="Stretch" width="100%">
 						<m:HBox width="40%" alignItems="Center" justifyContent="Start">
 							<m:Text text="Gösterilecek Kayıt Sayısı :"/>
-							<m:Select forceSelection="false" id="rid" width="100%" selectedKey="25"  change="changePaginator">
+							<m:Select forceSelection="false" id="rid" width="100%" selectedKey="10"  change="changePaginator">
 								<core:Item key="10" text="10" />
 								<core:Item key="25" text="25" />
 								<core:Item key="50" text="50" />

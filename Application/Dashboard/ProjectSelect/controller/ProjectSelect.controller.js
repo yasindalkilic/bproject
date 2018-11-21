@@ -81,7 +81,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
         },
         changePaginator: function (oEvent) {
             var _this = this
-            CreateComponent.tablaPaginator(_this, 'idactivesproject', "allProject", 'page', parseInt(oEvent.getSource().getSelectedKey()));
+            CreateComponent.tablaPaginator(_this, 'idactivesproject', "allProject", 'footerToolbar', parseInt(oEvent.getSource().getSelectedKey()));
         },
         getActiveProject: function () {
             var _this = this
@@ -131,7 +131,7 @@ sap.ui.define(['sap/ui/core/mvc/Controller', 'sap/ui/model/Filter', "sap/ui/expo
                                 )
                             }
                             oModel.setProperty("/allProject", projdata)
-                            CreateComponent.tablaPaginator(_this, 'idactivesproject', "allProject", 'page', parseInt(_this.byId("rid").getSelectedKey()));
+                            CreateComponent.tablaPaginator(_this, 'idactivesproject', "allProject", 'footerToolbar', parseInt(_this.byId("rid").getSelectedKey()));
                         }
                     })
                 }

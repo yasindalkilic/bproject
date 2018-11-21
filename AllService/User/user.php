@@ -34,17 +34,17 @@ class User extends database
                 return $this->result;
             } else {
                 for ($i = 0; $i < count($userRows); $i++) {
-                    $this->result[] = array("Status" => "Okey", "uid" => $userRows[$i]['uid'], "ufnm" => $userRows[$i]['ufnm'], "ulnm" => $userRows[$i]["ulnm"], "unm" => $userRows[$i]["unm"], "upnt" => $userRows[$i]["upnt"], "usno" => $userRows[$i]["usno"], "tid" => $userRows[$i]["tid"], "uauthr" => $userRows[$i]["uauthr"], "tnm" => $userRows[$i]["tnm"], "autnm" => $userRows[$i]["autnm"], "uLD" => $uLT, "sid" => $userRows[$i]["sid"], "sname" => $userRows[$i]["sname"], );
+                    $this->result[] = array("Status" => "Okey", "uid" => $userRows[$i]['uid'], "ufnm" => $userRows[$i]['ufnm'], "ulnm" => $userRows[$i]["ulnm"], "unm" => $userRows[$i]["unm"], "upnt" => $userRows[$i]["upnt"], "usno" => $userRows[$i]["usno"], "tid" => $userRows[$i]["tid"], "uauthr" => $userRows[$i]["uauthr"], "tnm" => $userRows[$i]["tnm"], "autnm" => $userRows[$i]["autnm"], "uLD" => $uLT, "sid" => $userRows[$i]["sid"], "sname" => $userRows[$i]["sname"],"quotaremain" => $userRows[$i]["quotaremain"]);
                 }
                 return $this->result;
             }
         }
     }
-    public function ADD($ufnm, $ulnm, $unm, $utel, $upnt, $usno, $upass, $sid, $tid, $uauthr, $email)
+    public function ADD($ufnm, $ulnm, $unm, $utel, $upnt, $usno, $upass, $sid, $tid, $uauthr, $email,$quotaremain)
     {
         if (isset($_SESSION["UNM"])) {
             $addRows = $this->ekle("INSERT INTO user 
-    (ufnm,ulnm,upnt,usno,unm,tid,uauthr) values('$ufnm','$ulnm','$upnt','$usno','$unm','$tid','$uauthr')");
+    (ufnm,ulnm,upnt,usno,unm,tid,uauthr,quotaremain) values('$ufnm','$ulnm','$upnt','$usno','$unm','$tid','$uauthr','$quotaremain')");
             if ($addRows) {
                 $userRows = $this->getrows("SELECT  * FROM user  where unm=?", array($unm));
                 $uid = $userRows[0]['uid'];
@@ -126,8 +126,9 @@ class User extends database
                 $uauthr = $userdata[$i]['uauthr'];
                 $utel = $userdata[$i]['utel'];
                 $sid = $userdata[$i]['sid'];
+                $quotaremain=$userdata[$i]['quotaremain'];
                 $addRows = $this->ekle("INSERT INTO user 
-                (ufnm,ulnm,upnt,usno,unm,tid,uauthr) values('$ufnm','$ulnm','$upnt','$usno','$unm','$tid','$uauthr')");
+                (ufnm,ulnm,upnt,usno,unm,tid,uauthr,quotaremain) values('$ufnm','$ulnm','$upnt','$usno','$unm','$tid','$uauthr','$quotaremain')");
                 if ($addRows) {
                     $userRows = $this->getrows("SELECT  * FROM user  where unm=?", array($unm));
                     $uid = $userRows[0]['uid'];

@@ -1,3 +1,4 @@
+jQuery.sap.require("okul.Application.Dashboard.SystemSettings.SystemSettingsServicejs.SystemSettings");
 jQuery.sap.require("okul.Application.Dashboard.SectionServicejs.SectionService");
 jQuery.sap.require("okul.Servicejs.PluginsService");
 sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
@@ -31,6 +32,10 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
             }
             else if (!oModel.oData.AddUser[0].upass.trim().length || oModel.oData.AddUser[0].upass.trim().length < 6) {
                 result = [false, "upass"];
+            } else if (_this.byId("tid").getSelectedKey() == "2") {
+                if (!oModel.oData.AddUser[0].usno.length || oModel.oData.AddUser[0].usno.split("_")[0].length != 10) {
+                    result = [false, "ogrno"];
+                }
             }
             else {
                 result = [true, "validate"]
@@ -54,6 +59,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                 sap.m.MessageToast.show("Telefon Numarası Alanı Geçersiz");
             } else if (_this.checkValidate()[0] == false && _this.checkValidate()[1] == "upass") {
                 sap.m.MessageToast.show("Şifre Alanı Boş veya 6 karakterden Daha Az Olamaz");
+            } else if (_this.checkValidate()[0] == false && _this.checkValidate()[1] == "ogrno") {
+                sap.m.MessageToast.show("Öğrenci Numarasını 10 karakterden daha küçük olamaz");
             } else {
                 _this.getAllWhereUser();
             }
@@ -100,9 +107,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
             oModel.oData.AddUser[0].uauthr = _this.byId("autid").getSelectedKey();
             oModel.oData.AddUser[0].upass = md5(oModel.oData.AddUser[0].upass)
             oModel.oData.AddUser[0].sid = _this.byId("sections").getSelectedKey();
+            oModel.oData.AddUser[0].quotaremain = _this.byId("tid").getSelectedKey() == "1" ? "" : oModel.oData.SysSettings[0].pjscontenjan;
             UserServices.UserReq(oModel.oData.AddUser[0]).then(function (res) {
                 if (res == "SuccesAdd") {
                     sap.m.MessageToast.show("Kullanıcı Başarı İle Oluşturuldu");
+                    _this.byId("usnoid").setVisible(false);
                     var data = [{
                         ufnm: "",
                         ulnm: "",
@@ -135,6 +144,16 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                 }
             })
         },
+        onstudent: function (oEvent) {
+            // var _this = this
+            // debugger
+            // if (_this.byId("tid").getSelectedKey() == "2") {
+            //     _this.byId("usnoid").setVisible(true);
+            // }
+            // else {
+            //     _this.byId("usnoid").setVisible(false);
+            // }
+        },
         onBeforeShow: function (argument) {
             UseronLogin.onLogin().then(function (res) {
                 var filter = {
@@ -151,6 +170,15 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
                 })
                 PluginService.PluginReq({ SN: "Title", MN: "GETT" }).then(function (res) {
                     oModel.setProperty("/title", res)
+                })
+                SystemService.getSystemSetting({ MN: "GETSYS", SN: "SystemSettings" }).then(function (res) {
+                    if (res == "None") {
+                        oModel.setProperty("/SysSettings", [])
+                    } else if (res == "") {
+                        sap.m.MessageToast.show("Beklenmeyen Hata Lütfen Daha Sonra Tekrar Deneyiniz")
+                    } else {
+                        oModel.setProperty("/SysSettings", res)
+                    }
                 })
                 var data = [{
                     ufnm: "",

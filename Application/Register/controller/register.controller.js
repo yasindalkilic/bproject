@@ -1,7 +1,6 @@
 jQuery.sap.require("okul.Application.Register.RegisterServicejs.RegisterService");
 jQuery.sap.require("okul.Servicejs.MailService");
 jQuery.sap.require("okul.Application.Dashboard.SectionServicejs.SectionService");
-jQuery.sap.require("okul.Servicejs.UserService");
 sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (MessageBox, Controller) {
     "use strict";
     var PageController = Controller.extend("okul.Application.Register.controller.Register", {
@@ -85,27 +84,7 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
             var _this = this
             RegisterService.RegisterReq({ "MN": "GET", where: "rtsno=? OR rttcno=?", param: [parseInt(oModel.oData.RegisterModel.ogrno), oModel.oData.RegisterModel.tcno], SN: "Register" }).then(function (res) {
                 if (res == "None") {
-                    var data = {
-                        SN: "User",
-                        MN: "GAUW",
-                        uwhere: "unm=?",
-                        uparam: oModel.oData.RegisterModel.ogrno,
-                        mwhere: "mail=?",
-                        mparam: oModel.oData.RegisterModel.email,
-                        pwhere: "pnmbr=?",
-                        pparam: oModel.oData.RegisterModel.tel.length
-                    }
-                    UserServices.UserReq(data).then(function (res) {
-                        if (res[0].Status == "haveUNM") {
-                            sap.m.MessageToast.show("Bu Kullanıcı Adı Mevcut")
-                        } else if (res[0].Status == "haveM") {
-                            sap.m.MessageToast.show("Bu Email Adresi  Mevcut")
-                        } else if (res[0].Status == "haveP") {
-                            sap.m.MessageToast.show("Bu Telefon Numarası  Mevcut")
-                        } else {
-                            _this.onRegister();
-                        }
-                    })
+                    _this.onRegister();
                 } else {
                     sap.m.MessageToast.show("Öğreni Numarası Veya Tc Kimlik No Geçersiz")
                 }
@@ -126,6 +105,8 @@ sap.ui.define(['sap/m/MessageBox', 'sap/ui/core/mvc/Controller'], function (Mess
                     RegisterService.RegisterReq({ "where": 'rtrcode=?', param: [res[0].activationkey], "MN": "GET", "SN": "Register" }).then(function (res) {
                         oModel.setProperty("/userRegister", res);
                         oModel.setProperty("/RegisterModel", [])
+
+                        debugger
                         var msg = "Aktivitasyon kodu :" + oModel.oData.userRegister[0].rtrcode + "Kaydınız Onaylandıktan Sonra Size Mail İle Bildirim Yapılacaktır.";
                         MailService.AddMail({ "maildata": [{ "mail": oModel.oData.userRegister[0].rtemail, "messega": msg }] }).then(function (res) {
                             if (res == "None") {
